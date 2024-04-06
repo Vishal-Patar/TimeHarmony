@@ -1,0 +1,34 @@
+# Node.js
+node_modules/
+
+# Dependency directories
+/jspm_packages/
+/bower_components/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Log files
+logs/
+*.log
+
+# Output of build tools
+/dist/
+/build/
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+
+# Miscellaneous
+*.swp
+*.swo
+*.swn
