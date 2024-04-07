@@ -17,6 +17,8 @@ const routes = {
     helpSupport: () => '/help-support',
     manage: () => '/manage',
     manageUsers: () => '/manage/users',
+    createUser: () => '/manage/users/add',
+    editUser: () => '/manage/users/edit/:id',
     manageRoles: () => '/manage/roles',
 }
 

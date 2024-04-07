@@ -27,7 +27,6 @@ const Button = ({
             {loadingPosition === 'center' && loadingIndicator}
             {loading && <CircularProgress color="inherit" size={16} />}
         </MuiButton>
-
     )
 }
 
