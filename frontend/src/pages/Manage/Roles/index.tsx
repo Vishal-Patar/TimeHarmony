@@ -15,22 +15,22 @@ const Roles = () => {
     {
       field: "name",
       headerName: "Name",
-      maxWidth: 300,
+      minWidth: 150,
     },
     {
       field: "label",
       headerName: "Label",
-      maxWidth: 300,
+      minWidth: 150,
     },
     {
       field: "permissionsk",
       headerName: "Permissions",
-      maxWidth: 300,
+      minWidth: 150,
     },
     {
       field: "action",
       headerName: "Action",
-      maxWidth: 300,
+      minWidth: 150,
       renderCell: (params) => (
         <Box>
           <IconButton href={routes.editUser()} aria-label="edit">

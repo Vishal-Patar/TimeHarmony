@@ -3,7 +3,6 @@ import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
 import DashboardCustomizeOutlinedIcon from '@mui/icons-material/DashboardCustomizeOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import EventBusyOutlinedIcon from '@mui/icons-material/EventBusyOutlined';
-import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
@@ -135,18 +134,6 @@ export const MenuItems = () => {
                         ),
                     },
                 ]
-            },
-            {
-                name: 'reports-analytics',
-                label: 'Reports and Analytics',
-                targetLink: routes.reportsAnalytics(),
-                icon: (
-                    <BarChartOutlinedIcon
-                        style={{
-                            color: theme.customColor.sidebar.icon
-                        }}
-                    />
-                )
             },
             {
                 name: 'profile-settings',
