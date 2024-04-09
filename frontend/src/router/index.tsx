@@ -14,15 +14,13 @@ import {
   PasswordReset,
   ProfileSettings,
   Register,
-  ReportsAnalytics,
 } from "../pages";
 import routes from "./routes";
-import Roles from "../pages/Organization/Roles";
 import Department from "../pages/Organization/Department";
 import DefaultLayout from "../layout/DefaultLayout";
 import Landing from "../pages/Landing";
-import Functions from "../pages/Organization/Functions";
-import Category from "../pages/Organization/Category";
+
+import Designation from "../pages/Organization/Designation";
 
 export const router = createBrowserRouter([
   {
@@ -61,28 +59,12 @@ export const router = createBrowserRouter([
         element: <Employee />,
       },
       {
-        path: routes.employeeRoles(),
-        element: <Roles />,
+        path: routes.employeeDesignations(),
+        element: <Designation />,
       },
       {
         path: routes.employeeDepartment(),
         element: <Department />,
-      },
-      {
-        path: routes.employeeFunction(),
-        element: <Functions />,
-      },
-      {
-        path: routes.employeeCategory(),
-        element: <Category />,
-      },
-      {
-        path: routes.employeeCategory(),
-        element: <Category />,
-      },
-      {
-        path: routes.reportsAnalytics(),
-        element: <ReportsAnalytics />,
       },
       {
         path: routes.profileSettings(),

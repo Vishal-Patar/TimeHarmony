@@ -7,9 +7,7 @@ import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlin
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
-import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
-import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
@@ -82,9 +80,9 @@ export const MenuItems = () => {
                         ),
                     },
                     {
-                        name: 'roles',
-                        label: 'Roles',
-                        targetLink: routes.employeeRoles(),
+                        name: 'designation',
+                        label: 'Designations',
+                        targetLink: routes.employeeDesignations(),
                         icon: (
                             <AssignmentIndOutlinedIcon
                                 style={{
@@ -100,32 +98,6 @@ export const MenuItems = () => {
                         targetLink: routes.employeeDepartment(),
                         icon: (
                             <WorkOutlineOutlinedIcon
-                                style={{
-                                    color: theme.customColor.sidebar.subIcon,
-                                    fontSize: '20px'
-                                }}
-                            />
-                        ),
-                    },
-                    {
-                        name: 'function',
-                        label: 'Function',
-                        targetLink: routes.employeeFunction(),
-                        icon: (
-                            <LabelOutlinedIcon
-                                style={{
-                                    color: theme.customColor.sidebar.subIcon,
-                                    fontSize: '20px'
-                                }}
-                            />
-                        ),
-                    },
-                    {
-                        name: 'employee-category',
-                        label: 'Employee Category',
-                        targetLink: routes.employeeCategory(),
-                        icon: (
-                            <SupervisorAccountOutlinedIcon
                                 style={{
                                     color: theme.customColor.sidebar.subIcon,
                                     fontSize: '20px'
