@@ -1,34 +1,40 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, TextField, Typography, CssBaseline } from '@mui/material';
-import { FullHeightContainer } from '../style';
-import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import {
+  TextField,
+  Typography,
+  CssBaseline,
+  Box,
+  Snackbar,
+} from "@mui/material";
+import { FullHeightContainer } from "../style";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useLoginUser } from "../../api/users/useUsers";
+import Button from "../../common/Button";
+import routes from "../../router/routes";
+import { useEffect, useState } from "react";
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { mutateAsync, isPending, isError } = useLoginUser();
+  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const onSubmit = async (data: any) => {
+    await mutateAsync(data);
+    navigate(routes.dashboard());
   };
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log('Login data:', formData);
-    // You can add your login logic and API calls here
-
-    // after successful login
-    navigate('/dashboard')
-  };
+  useEffect(() => {
+    console.log('isError', isError)
+    setOpen(isError);
+  }, [isError])
+  
 
   return (
     <FullHeightContainer maxWidth="xs">
@@ -37,38 +43,67 @@ const Login = () => {
         <Typography variant="h5" align="center">
           Login
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
-            margin="normal"
-            fullWidth
             label="Email"
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <TextField
             margin="normal"
             fullWidth
+            required
+            {...register("email", {
+              required: "Email is required",
+              pattern: /^\S+@\S+$/i,
+            })}
+            error={!!errors.email}
+            helperText={errors?.email?.message?.toString()}
+          />
+
+          <TextField
             label="Password"
             type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
+            margin="normal"
+            fullWidth
             required
+            {...register("password", {
+              required: "Password is required with minimum 8 character",
+              minLength: 8,
+            })}
+            error={!!errors.password}
+            helperText={errors?.password?.message?.toString()}
           />
-          <Button type="submit" fullWidth variant="contained" color="primary">
-            Login
-          </Button>
+          <Box mt={2}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              loading={isPending}
+            >
+              Login
+            </Button>
+          </Box>
         </form>
-        <Typography variant="body2" align="center" style={{ marginTop: '16px' }}>
+        <Typography
+          variant="body2"
+          align="center"
+          style={{ marginTop: "16px" }}
+        >
           <Link to="/password-reset">Forgot password?</Link>
         </Typography>
-        <Typography variant="body2" align="center" style={{ marginTop: '16px' }}>
+        <Typography
+          variant="body2"
+          align="center"
+          style={{ marginTop: "16px" }}
+        >
           Don't have an account? <Link to="/register">Register here</Link>
         </Typography>
       </div>
+
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={() => setOpen(false)}
+        message="Incorrect User Credentials!!!"
+      />
     </FullHeightContainer>
   );
 };

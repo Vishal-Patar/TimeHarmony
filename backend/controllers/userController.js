@@ -43,7 +43,20 @@ const register = asyncHandler(async (req, res) => {
       const employee = new Employee({ user: user._id, name: user.username });
       await employee.save();
 
-      res.status(201).json({ _id: user.id, email: user.email });
+      // After successul register login the user
+      const accessToken = sign(
+        {
+          user: {
+            username: user.username,
+            email: user.email,
+            id: user.id,
+          },
+        },
+        process.env.ACCESS_TOKEN_SECERT,
+        { expiresIn: "15m" }
+      );
+
+      res.status(201).json({ _id: user.id, email: user.email, accessToken });
     } else {
       res.status(400);
       throw new Error("User data is not valid");
@@ -76,7 +89,7 @@ const login = asyncHandler(async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECERT,
-      { expiresIn: "15m" }
+      // { expiresIn: "15m" }
     );
     res.status(200).json({ accessToken });
   } else {

@@ -5,6 +5,7 @@ import { FullHeightContainer } from '../style';
 import { useForm } from 'react-hook-form';
 import Button from '../../common/Button';
 import { useRegisterUser } from '../../api/users/useUsers';
+import routes from '../../router/routes';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -13,7 +14,7 @@ const Register = () => {
 
     const onSubmit = async(data: any) => {
        await mutateAsync(data)
-       navigate('/dashboard')
+       navigate(routes.dashboard());
     };
 
     console.log("errors", errors);

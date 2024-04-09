@@ -26,8 +26,6 @@ const AppSidebar = () => {
     const dispatch = useDispatch();
     const isDrawerOpen = useSelector((state: any) => state.drawer.isDrawerOpen);
 
-    console.log("pathname", pathname)
-
     const handleMenuItemClick = (target: string) => {
         navigate(target ?? '#')
     }

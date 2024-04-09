@@ -1,6 +1,6 @@
 const routes = {
     root: () => '/',
-    login: () => 'login',
+    login: () => '/login',
     register: () => 'register',
     passwordReset: () => 'password-reset',
     dashboard: () => '/dashboard',
