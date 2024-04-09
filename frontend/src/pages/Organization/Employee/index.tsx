@@ -11,13 +11,8 @@ import { useGetEmployees } from "../../../api/employees/useEmployees";
 
 const Employee = () => {
   const { data, isLoading } = useGetEmployees();
-  console.log("employee data ..", data)
+  
   const columns: GridColDef[] = [
-    {
-      field: "label",
-      headerName: "Label",
-      minWidth: 400,
-    },
     {
       field: "name",
       headerName: "Name",

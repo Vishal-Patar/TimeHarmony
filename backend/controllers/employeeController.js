@@ -4,6 +4,7 @@ import Employee from "../models/employeeModel.js";
 const getEmployees = asyncHandler(async (req, res) => {
   try {
     const employees = await Employee.find()
+      .populate("user")
       .populate("designation")
       .populate("department");
 
@@ -56,12 +57,10 @@ const deleteEmployee = asyncHandler(async (req, res) => {
     if (!deletedEmployee) {
       return res.status(404).json({ message: "Employee not found" });
     }
-    res
-      .status(200)
-      .json({
-        message: "Employee deleted successfully",
-        employee: deletedEmployee,
-      });
+    res.status(200).json({
+      message: "Employee deleted successfully",
+      employee: deletedEmployee,
+    });
   } catch (error) {
     console.error("Error deleting employee:", error);
     res.status(500).json({ message: "Server error" });
@@ -95,16 +94,20 @@ const updateEmployee = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Employee not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        message: "Employee updated successfully",
-        employee: updatedEmployee,
-      });
+    res.status(200).json({
+      message: "Employee updated successfully",
+      employee: updatedEmployee,
+    });
   } catch (error) {
     console.error("Error updating employee:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-export { getEmployees, createEmployee, getEmployeeById, deleteEmployee , updateEmployee};
+export {
+  getEmployees,
+  createEmployee,
+  getEmployeeById,
+  deleteEmployee,
+  updateEmployee,
+};
