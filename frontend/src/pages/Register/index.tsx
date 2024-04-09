@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { TextField, Typography, CssBaseline, Box } from '@mui/material';
 import { FullHeightContainer } from '../style';
 import { useForm } from 'react-hook-form';
-import { useRegisterUser } from '../../api/users/useRegisterUser';
 import Button from '../../common/Button';
+import { useRegisterUser } from '../../api/users/useUsers';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();

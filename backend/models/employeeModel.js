@@ -8,7 +8,7 @@ const employeeSchema = Schema(
       required: true,
     },
     name: { type: String, required: true },
-    address: { type: String, required: true },
+    address: { type: String },
     designation: {
       type: Schema.Types.ObjectId,
       ref: "Designation",
@@ -23,4 +23,4 @@ const employeeSchema = Schema(
   }
 );
 
-export default model("Department", employeeSchema);
+export default model("Employee", employeeSchema);

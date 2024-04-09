@@ -7,7 +7,7 @@ import Loader from "../../../common/Loader";
 import Typography from "../../../common/Typography";
 import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
-import { useGetDesignations } from "../../../api/designations/useGetdesingations";
+import { useGetDesignations } from "../../../api/designations/useDesingations";
 
 const Designation = () => {
   const { data, isLoading } = useGetDesignations();
@@ -67,7 +67,7 @@ const Designation = () => {
       <DataGrid
         getRowId={(row) => row?._id ?? 0}
         loading={isLoading}
-        rows={data}
+        rows={data ?? []}
         columns={columns}
         initialState={{
           pagination: {

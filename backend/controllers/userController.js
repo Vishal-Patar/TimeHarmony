@@ -4,6 +4,7 @@ import pkg from "jsonwebtoken";
 const { sign } = pkg;
 import User from "../models/userModel.js";
 import Role from "../models/roleModel.js";
+import Employee from "../models/employeeModel.js";
 
 //@desc Register a user
 //@route POST /api/users/register
@@ -20,11 +21,11 @@ const register = asyncHandler(async (req, res) => {
     throw new Error("User already registered!");
   }
 
-   // Fetch the ObjectId for the provided role name or set the default as employee
-   const roleObject = await Role.findOne({ name: role ?? 'employee'});
-   if (!roleObject) {
-     return res.status(400).json({ error: "Role not found" });
-   }
+  // Fetch the ObjectId for the provided role name or set the default as employee
+  const roleObject = await Role.findOne({ name: role ?? "employee" });
+  if (!roleObject) {
+    return res.status(400).json({ error: "Role not found" });
+  }
 
   //Hash password
   const hashedPassword = await hash(password, 10);
@@ -35,17 +36,20 @@ const register = asyncHandler(async (req, res) => {
       email,
       password: hashedPassword,
       role: roleObject._id,
-      status
+      status,
     });
-    console.log(`User created ${user}`);
     if (user) {
+      // Create the employee record linked to the user ID
+      const employee = new Employee({ user: user._id, name: user.username });
+      await employee.save();
+
       res.status(201).json({ _id: user.id, email: user.email });
     } else {
       res.status(400);
       throw new Error("User data is not valid");
     }
   } catch (error) {
-    console.log("errpr",error)
+    console.log("errpr", error);
     throw new Error(error);
   }
   res.json({ message: "Register the user" });
@@ -89,7 +93,7 @@ const currentUser = asyncHandler(async (req, res) => {
 });
 
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find().populate('role');
+  const users = await User.find().populate("role");
   res.status(200).json(users);
 });
 

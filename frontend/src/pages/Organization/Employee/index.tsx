@@ -1,39 +1,35 @@
+import React from "react";
 import { Box, IconButton } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import Loader from "../../../common/Loader";
-import Button from "../../../common/Button";
-import AddIcon from "@mui/icons-material/Add";
-import Typography from "../../../common/Typography";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import routes from "../../../router/routes";
-import { useGetRoles } from "../../../api/roles/useRoles";
+import Loader from "../../../common/Loader";
+import Typography from "../../../common/Typography";
+import Button from "../../../common/Button";
+import AddIcon from "@mui/icons-material/Add";
+import { useGetEmployees } from "../../../api/employees/useEmployees";
 
-const Roles = () => {
-  const { data, isLoading } = useGetRoles();
+const Employee = () => {
+  const { data, isLoading } = useGetEmployees();
+  console.log("employee data ..", data)
   const columns: GridColDef[] = [
-    {
-      field: "name",
-      headerName: "Name",
-      minWidth: 150,
-    },
     {
       field: "label",
       headerName: "Label",
-      minWidth: 150,
+      minWidth: 400,
     },
     {
-      field: "permissionsk",
-      headerName: "Permissions",
-      minWidth: 150,
+      field: "name",
+      headerName: "Name",
+      minWidth: 400,
     },
     {
       field: "action",
       headerName: "Action",
-      minWidth: 150,
+      minWidth: 100,
       renderCell: (params) => (
         <Box>
-          <IconButton href={routes.editUser()} aria-label="edit">
+          <IconButton aria-label="edit">
             <EditIcon color="info" />
           </IconButton>
           <IconButton
@@ -59,9 +55,8 @@ const Roles = () => {
           marginBottom: 2,
         }}
       >
-        <Typography variant="h6">All Roles</Typography>
+        <Typography variant="h6">All Employees</Typography>
         <Button
-          href={routes.createUser()}
           variant="contained"
           color="primary"
           startIcon={<AddIcon />}
@@ -101,4 +96,4 @@ const Roles = () => {
   );
 };
 
-export default Roles;
+export default Employee;

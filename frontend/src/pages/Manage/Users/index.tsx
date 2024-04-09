@@ -1,6 +1,5 @@
 import { Box, IconButton } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { useGetUsers } from "../../../api/users/useGetUsers";
 import Loader from "../../../common/Loader";
 import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -8,6 +7,7 @@ import Typography from "../../../common/Typography";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import routes from "../../../router/routes";
+import { useGetUsers } from "../../../api/users/useUsers";
 
 const Users = () => {
   const { data, isLoading } = useGetUsers();
@@ -99,7 +99,7 @@ const Users = () => {
       <DataGrid
         getRowId={(row) => row?._id ?? 0}
         loading={isLoading}
-        rows={data}
+        rows={data ?? []}
         columns={columns}
         initialState={{
           pagination: {

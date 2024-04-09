@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetDepartments } from "../../../api/departments/useGetDepartments";
+import { useGetDepartments } from "../../../api/departments/useDepartments";
 import { Box, IconButton } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -67,7 +67,7 @@ const Department = () => {
       <DataGrid
         getRowId={(row) => row?._id ?? 0}
         loading={isLoading}
-        rows={data}
+        rows={data ?? []}
         columns={columns}
         initialState={{
           pagination: {
