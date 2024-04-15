@@ -7,6 +7,8 @@ import {
   Employee,
   HelpSupport,
   Leave,
+  LeaveManage,
+  LeaveRequests,
   Login,
   ManageRoles,
   ManageUsers,
@@ -53,6 +55,14 @@ export const router = createBrowserRouter([
       {
         path: routes.leave(),
         element: <Leave />,
+      },
+      {
+        path: routes.manageLeave(),
+        element: <LeaveManage />,
+      },
+      {
+        path: routes.requestLeave(),
+        element: <LeaveRequests />,
       },
       {
         path: routes.employee(),

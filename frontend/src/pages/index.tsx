@@ -6,6 +6,8 @@ export { default as Attendance } from './Attendance';
 export { default as Employee } from './Organization/Employee';
 export { default as HelpSupport } from './HelpSupport';
 export { default as Leave } from './Leave';
+export { default as LeaveRequests } from './Leave/Requests';
+export { default as LeaveManage } from './Leave/Manage';
 export { default as Notifications } from './Notifications';
 export { default as ProfileSettings } from './ProfileSettings';
 export { default as ReportsAnalytics } from './ReportsAnalytics/ReportsAnalytics';

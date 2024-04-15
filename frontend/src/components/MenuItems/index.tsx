@@ -45,13 +45,55 @@ export const MenuItems = () => {
                 name: 'leave',
                 label: 'Leave',
                 targetLink: routes.leave(),
+                activeBasePath: routes.leave(),
                 icon: (
                     <EventBusyOutlinedIcon
                         style={{
                             color: theme.customColor.sidebar.icon
                         }}
                     />
-                )
+                ),
+                submenu: [
+                    {
+                        name: 'view',
+                        label: 'View',
+                        targetLink: routes.leave(),
+                        icon: (
+                            <PersonSearchOutlinedIcon
+                                style={{
+                                    color: theme.customColor.sidebar.subIcon,
+                                    fontSize: '20px'
+                                }}
+                            />
+                        ),
+                    },
+                    {
+                        name: 'requests',
+                        label: 'Requests',
+                        targetLink: routes.requestLeave(),
+                        icon: (
+                            <AssignmentIndOutlinedIcon
+                                style={{
+                                    color: theme.customColor.sidebar.subIcon,
+                                    fontSize: '20px'
+                                }}
+                            />
+                        ),
+                    },
+                    {
+                        name: 'manage',
+                        label: 'Manage',
+                        targetLink: routes.manageLeave(),
+                        icon: (
+                            <WorkOutlineOutlinedIcon
+                                style={{
+                                    color: theme.customColor.sidebar.subIcon,
+                                    fontSize: '20px'
+                                }}
+                            />
+                        ),
+                    },
+                ]
             },
             {
                 name: 'organization',
