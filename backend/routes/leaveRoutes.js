@@ -1,17 +1,11 @@
 import { Router } from "express";
-import {
-  getRoles,
-  createRole,
-  deleteRole,
-  updateRole,
-  getRoleByName
-} from "../controllers/roleController.js";
+import { applyLeave, approveLeave, getEmployeeLeaveRequests, getLeaveRequests, rejectLeave } from "../controllers/leaveController.js";
 const leaveRoutes = Router();
 
-// leaveRoutes.get("/", getRoles);
-// leaveRoutes.post("/create", createRole);
-// leaveRoutes.delete("/:id", deleteRole);
-// leaveRoutes.patch("/:id", updateRole);
-// leaveRoutes.get("/name/:name", getRoleByName);
+leaveRoutes.post("/apply", applyLeave);
+leaveRoutes.get("/requests", getLeaveRequests);
+leaveRoutes.post("/approve/:leaveId", approveLeave);
+leaveRoutes.post("/reject/:leaveId", rejectLeave);
+leaveRoutes.get("/my-requests", getEmployeeLeaveRequests);
 
 export default leaveRoutes;

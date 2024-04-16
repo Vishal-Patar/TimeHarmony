@@ -17,6 +17,10 @@ const employeeSchema = Schema(
       type: Schema.Types.ObjectId,
       ref: "Department",
     },
+    reportingManager: {
+      type: Schema.Types.ObjectId,
+      ref: 'Employee', // Reference to another Employee document
+    },
   },
   {
     timestamps: true,
