@@ -20,7 +20,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { mutateAsync, isPending, isError } = useLoginUser();
+  const { mutateAsync, isPending, isError , error} = useLoginUser();
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -31,15 +31,13 @@ const Login = () => {
   };
 
   useEffect(() => {
-    console.log('isError', isError)
     setOpen(isError);
-  }, [isError])
-  
+  }, [isError])  
 
   return (
     <FullHeightContainer maxWidth="xs">
       <CssBaseline />
-      <div>
+      <Box>
         <Typography variant="h5" align="center">
           Login
         </Typography>
@@ -54,7 +52,7 @@ const Login = () => {
               pattern: /^\S+@\S+$/i,
             })}
             error={!!errors.email}
-            helperText={errors?.email?.message?.toString()}
+            helperText={errors?.email?.message?.toString() || (!!errors.email && 'Enter Valid Email')}
           />
 
           <TextField
@@ -68,7 +66,7 @@ const Login = () => {
               minLength: 8,
             })}
             error={!!errors.password}
-            helperText={errors?.password?.message?.toString()}
+            helperText={errors?.password?.message?.toString() || 'Password should be minimum 8 character'}
           />
           <Box mt={2}>
             <Button
@@ -96,7 +94,7 @@ const Login = () => {
         >
           Don't have an account? <Link to="/register">Register here</Link>
         </Typography>
-      </div>
+      </Box>
 
       <Snackbar
         open={open}

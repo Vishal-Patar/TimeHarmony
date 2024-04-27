@@ -1,17 +1,24 @@
 import React from "react";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Loader from "../../../common/Loader";
-import Typography from "../../../common/Typography";
 import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { useGetEmployees } from "../../../api/employees/useEmployees";
+import { useNavigate } from "react-router-dom";
+import routes from "../../../router/routes";
 
 const Employee = () => {
   const { data, isLoading } = useGetEmployees();
+  const navigate = useNavigate();
+
+  const handleEdit = (id:string) => {
+    navigate(routes.employee()+'/'+id)
+  }
   
+
   const columns: GridColDef[] = [
     {
       field: "name",
@@ -24,9 +31,13 @@ const Employee = () => {
       minWidth: 100,
       renderCell: (params) => (
         <Box>
-          <IconButton aria-label="edit">
+          <IconButton 
+          aria-label="edit"
+           onClick={() => handleEdit(params.row._id)}
+          >
             <EditIcon color="info" />
           </IconButton>
+
           <IconButton
             // onClick={() => handleDelete(params.row.id)}
             aria-label="delete"

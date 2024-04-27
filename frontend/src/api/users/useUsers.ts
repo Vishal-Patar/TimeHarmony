@@ -27,8 +27,9 @@ export const useRegisterUser = () => {
   return useMutation({
     mutationFn: registerUser,
     onSuccess: (data) => {
-      localStorage.setItem("accessToken", data?.accessToken);
-      console.log("user created successfully", data);
+      if (data?.accessToken) {
+        updateLocalStorage(data)
+      }
     },
     onError: (error, variables, context) => {
       console.log(error, variables, context);
@@ -45,8 +46,15 @@ export const useLoginUser = () => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
-      data?.accessToken &&
-        localStorage.setItem("accessToken", data?.accessToken);
+      if (data?.accessToken) {
+        updateLocalStorage(data)
+      }
     },
   });
+};
+
+const updateLocalStorage = (data: any) => {
+  localStorage.setItem("accessToken", data.accessToken);
+  localStorage.setItem("user", JSON.stringify(data.user));
+  localStorage.setItem("employee", JSON.stringify(data.employee));
 };

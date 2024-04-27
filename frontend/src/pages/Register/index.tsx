@@ -42,7 +42,7 @@ const Register = () => {
                         required
                         {...register('email', { required: 'Email is required', pattern: /^\S+@\S+$/i })}
                         error={!!errors.email}
-                        helperText={errors?.email?.message?.toString()}
+                        helperText={errors?.email?.message?.toString() || (!!errors.email && 'Enter a valid Email')}
                     />
 
                     <TextField
@@ -53,7 +53,7 @@ const Register = () => {
                         required
                         {...register('password', { required: 'Password is required with minimum 8 character', minLength: 8 })}
                         error={!!errors.password}
-                        helperText={errors?.password?.message?.toString()}
+                        helperText={errors?.password?.message?.toString() || 'Password should be minimum 8 character'}
                     />
 
                     <Box mt={2}>

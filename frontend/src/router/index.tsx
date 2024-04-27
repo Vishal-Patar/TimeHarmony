@@ -5,8 +5,10 @@ import {
   Dashboard,
   EditUser,
   Employee,
+  EmployeeEdit,
   HelpSupport,
   Leave,
+  LeaveApply,
   LeaveManage,
   LeaveRequests,
   Login,
@@ -65,8 +67,16 @@ export const router = createBrowserRouter([
         element: <LeaveRequests />,
       },
       {
+        path: routes.applyLeave(),
+        element: <LeaveApply />,
+      },
+      {
         path: routes.employee(),
         element: <Employee />,
+      },
+      {
+        path: routes.employeeEdit(),
+        element: <EmployeeEdit />,
       },
       {
         path: routes.employeeDesignations(),

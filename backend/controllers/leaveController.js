@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
-import Designation from "../models/designationModel.js";
 import Employee from "../models/employeeModel.js";
 import Leave from "../models/leaveModel.js";
+import LeaveType from "../models/leaveTypeModel.js";
 
 const applyLeave = asyncHandler(async (req, res) => {
   const { employeeId, startDate, endDate, reason } = req.body;
@@ -80,13 +80,37 @@ const rejectLeave = asyncHandler(async (req, res) => {
 });
 
 const getEmployeeLeaveRequests = asyncHandler(async (req, res) => {
-  const { employeeId } = req.user; // Assuming the employee ID is available in the request's user object
+  const { employeeId } = req.params;
   try {
-    const employeeLeaveRequests = await Leave.find({ employeeId });
-    res.json({ employeeLeaveRequests });
+    // Fetch all leave requests for the employee
+    const leaveRequests = await Leave.find({ employeeId }).populate('leaveType');
+
+    // Fetch leave types to get allowed days for each leave type
+    const leaveTypes = await LeaveType.find();
+
+    // Calculate used leave for each leave type
+    const leaveData = leaveTypes.map((leaveType) => {
+      const leaveTypeRequests = leaveRequests.filter((req) => req.leaveType._id.toString() === leaveType._id.toString());
+      const usedDays = leaveTypeRequests.reduce((total, req) => total + Math.abs((req.endDate - req.startDate) / (1000 * 60 * 60 * 24)), 0);
+      const availableDays = leaveType.allowedDays;
+      const remainingDays = availableDays - usedDays;
+
+      return {
+        _id: leaveType._id,
+        name: leaveType.name,
+        label: leaveType.label,
+        description: leaveType.description,
+        allowedDays: leaveType.allowedDays,
+        usedDays,
+        availableDays,
+        remainingDays,
+      };
+    });
+
+    res.json(leaveData);
   } catch (error) {
-    console.error('Error fetching employee leave requests:', error);
-    res.status(500).json({ error: 'Error fetching employee leave requests' });
+    console.error('Error fetching employee leave data:', error);
+    res.status(500).json({ error: 'Error fetching employee leave data' });
   }
 });
 

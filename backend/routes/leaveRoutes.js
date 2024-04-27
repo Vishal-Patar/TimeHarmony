@@ -6,6 +6,6 @@ leaveRoutes.post("/apply", applyLeave);
 leaveRoutes.get("/requests", getLeaveRequests);
 leaveRoutes.post("/approve/:leaveId", approveLeave);
 leaveRoutes.post("/reject/:leaveId", rejectLeave);
-leaveRoutes.get("/my-requests", getEmployeeLeaveRequests);
+leaveRoutes.get("/employee/:employeeId", getEmployeeLeaveRequests);
 
 export default leaveRoutes;

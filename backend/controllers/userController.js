@@ -29,7 +29,7 @@ const register = asyncHandler(async (req, res) => {
 
   //Hash password
   const hashedPassword = await hash(password, 10);
-  console.log("Hashed Password: ", hashedPassword);
+
   try {
     const user = await User.create({
       username,
@@ -56,7 +56,9 @@ const register = asyncHandler(async (req, res) => {
         { expiresIn: "15m" }
       );
 
-      res.status(201).json({ _id: user.id, email: user.email, accessToken });
+      res
+        .status(201)
+        .json({accessToken, user, employee });
     } else {
       res.status(400);
       throw new Error("User data is not valid");
@@ -71,7 +73,7 @@ const register = asyncHandler(async (req, res) => {
 //@desc Login user
 //@route POST /api/users/login
 //@access public
-const login = asyncHandler(async (req, res) => {
+const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400);
@@ -88,10 +90,13 @@ const login = asyncHandler(async (req, res) => {
           id: user.id,
         },
       },
-      process.env.ACCESS_TOKEN_SECERT,
+      process.env.ACCESS_TOKEN_SECERT
       // { expiresIn: "15m" }
     );
-    res.status(200).json({ accessToken });
+
+    const employee = await Employee.findOne({ user: user?.id });
+
+    res.status(200).json({ accessToken, user, employee });
   } else {
     res.status(401);
     throw new Error("email or password is not valid");

@@ -15,6 +15,7 @@ import routes from "../router/routes";
 
 const AppHeader = () => {
   const theme = useTheme();
+  const user = JSON.parse(localStorage?.getItem("user") ?? "");
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<any>(null);
   const open = Boolean(anchorEl);
@@ -27,12 +28,13 @@ const AppHeader = () => {
 
   const handleLogout = () => {
     // Logout the user
-    localStorage.removeItem('accessToken');
-    sessionStorage.removeItem('accessToken');
+    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
     navigate(routes.login());
-    handleClose()
-  }
-  
+    handleClose();
+  };
 
   return (
     <AppBar
@@ -47,7 +49,7 @@ const AppHeader = () => {
         </Typography>
         <Box sx={{ flexGrow: 0 }}>
           <IconButton onClick={handleClick} sx={{ p: 0 }}>
-            <Avatar alt="User Avatar" />
+            <Avatar>{user?.username?.[0]}</Avatar>
           </IconButton>
           <Menu
             id="profile-positioned-menu"
@@ -64,7 +66,14 @@ const AppHeader = () => {
               horizontal: "left",
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigate(routes.profileSettings());
+              }}
+            >
+              Profile
+            </MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Box>

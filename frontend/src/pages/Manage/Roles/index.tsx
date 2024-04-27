@@ -1,9 +1,8 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import Loader from "../../../common/Loader";
 import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
-import Typography from "../../../common/Typography";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import routes from "../../../router/routes";
