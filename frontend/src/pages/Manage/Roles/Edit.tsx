@@ -94,24 +94,24 @@ const Edit = () => {
     {
       field: "id",
       headerName: "ID",
-      width: 80,
+      flex: 1,
     },
     {
       field: "section",
       headerName: "Section",
-      width: 180,
+      flex: 1,
     },
     {
       field: "readAccess",
       headerName: "Read Access",
-      width: 180,
+      flex: 1,
       type: "boolean",
       editable: !readOnly,
     },
     {
       field: "writeAccess",
       headerName: "Write Access",
-      width: 180,
+      flex: 1,
       type: "boolean",
       editable: !readOnly,
     },
@@ -119,7 +119,7 @@ const Edit = () => {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 100,
+      flex: 1,
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -233,11 +233,7 @@ const Edit = () => {
           error={!!errors.name}
           helperText={errors?.name?.message?.toString()}
           inputProps={{
-            readOnly:
-              readOnly ||
-              role?.name === "employee" ||
-              role?.name === "super-admin" ||
-              role?.name === "admin",
+            readOnly: readOnly || mode === "edit",
           }}
         />
 
@@ -259,7 +255,10 @@ const Edit = () => {
           <Typography variant="h6" marginY={1}>
             Permissions
           </Typography>
-
+          <p>
+            <b>Note: </b>For <b>Write</b> permission to work, please enable
+            corresponding <b>Read</b> access
+          </p>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -279,12 +278,10 @@ const Edit = () => {
             slots={{
               toolbar: GridToolbar,
             }}
-            style={{
-              minHeight: 300,
-            }}
             columnVisibilityModel={{
               actions: !readOnly,
             }}
+            autoHeight
           />
         </Box>
       </form>

@@ -27,7 +27,7 @@ const Register = () => {
                 </Typography>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <TextField
-                        label="Username"
+                        label="Full Name"
                         margin="normal"
                         fullWidth
                         required

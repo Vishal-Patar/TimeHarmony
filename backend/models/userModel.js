@@ -17,13 +17,12 @@ const userSchema = Schema(
     },
     role: {
       type: Schema.Types.ObjectId,
-      ref: 'Role', // Make sure 'Role' matches your actual role model name
+      ref: "Role", // Make sure 'Role' matches your actual role model name
       required: true,
     },
     status: {
-      type: String,
-      enum: ["active", "inactive"],
-      default: "active",
+      type: Boolean,
+      default: true,
     },
   },
   {

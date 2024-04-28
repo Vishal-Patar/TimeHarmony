@@ -80,3 +80,32 @@ export const useCreateRole = () => {
     },
   });
 };
+
+export const useDeleteRole = () => {
+  const queryClient = useQueryClient();
+  const deleteRole = async (id: string) => {
+    if (!id) {
+      throw new Error("Role ID is required.");
+    }
+
+    const { data } = await ssoApiService().delete(
+      `${ROLE_PATH.ROLE_LIST}/${id}`
+    );
+
+    return data;
+  };
+  return useMutation({
+    mutationFn: (request: any) => deleteRole(request?.id),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["useGetRoles"] });
+      enqueueSnackbar("Deleted Successfully", {
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error?.message ?? "Error", {
+        variant: "error",
+      });
+    },
+  });
+};

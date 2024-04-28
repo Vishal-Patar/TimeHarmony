@@ -16,5 +16,4 @@ export { default as ReportsAnalytics } from './ReportsAnalytics/ReportsAnalytics
 export { default as ManageRoles } from './Manage/Roles';
 export { default as ManageRolesEdit } from './Manage/Roles/Edit';
 export { default as ManageUsers } from './Manage/Users';
-export { default as AddUser } from './Manage/Users/Add';
 export { default as EditUser } from './Manage/Users/Edit';

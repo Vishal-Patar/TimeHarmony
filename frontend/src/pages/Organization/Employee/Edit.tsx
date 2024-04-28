@@ -130,8 +130,8 @@ const Edit = () => {
           fullWidth
           required
           {...register("name", { required: "Name is required" })}
-          error={!!errors.username}
-          helperText={errors?.username?.message?.toString()}
+          error={!!errors.name}
+          helperText={errors?.name?.message?.toString()}
           inputProps={{ readOnly }}
         />
         <TextField

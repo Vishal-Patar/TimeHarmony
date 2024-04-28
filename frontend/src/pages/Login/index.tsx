@@ -1,18 +1,11 @@
 import { Link } from "react-router-dom";
-import {
-  TextField,
-  Typography,
-  CssBaseline,
-  Box,
-  Snackbar,
-} from "@mui/material";
+import { TextField, Typography, CssBaseline, Box } from "@mui/material";
 import { FullHeightContainer } from "../style";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useLoginUser } from "../../api/users/useUsers";
 import Button from "../../common/Button";
 import routes from "../../router/routes";
-import { useEffect, useState } from "react";
 
 const Login = () => {
   const {
@@ -20,8 +13,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { mutateAsync, isPending, isError , error} = useLoginUser();
-  const [open, setOpen] = useState(false);
+  const { mutateAsync, isPending } = useLoginUser();
 
   const navigate = useNavigate();
 
@@ -29,10 +21,6 @@ const Login = () => {
     await mutateAsync(data);
     navigate(routes.dashboard());
   };
-
-  useEffect(() => {
-    setOpen(isError);
-  }, [isError])  
 
   return (
     <FullHeightContainer maxWidth="xs">
@@ -52,7 +40,10 @@ const Login = () => {
               pattern: /^\S+@\S+$/i,
             })}
             error={!!errors.email}
-            helperText={errors?.email?.message?.toString() || (!!errors.email && 'Enter Valid Email')}
+            helperText={
+              errors?.email?.message?.toString() ||
+              (!!errors.email && "Enter Valid Email")
+            }
           />
 
           <TextField
@@ -66,7 +57,10 @@ const Login = () => {
               minLength: 8,
             })}
             error={!!errors.password}
-            helperText={errors?.password?.message?.toString() || 'Password should be minimum 8 character'}
+            helperText={
+              errors?.password?.message?.toString() ||
+              "Password should be minimum 8 character"
+            }
           />
           <Box mt={2}>
             <Button
@@ -95,13 +89,6 @@ const Login = () => {
           Don't have an account? <Link to="/register">Register here</Link>
         </Typography>
       </Box>
-
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={() => setOpen(false)}
-        message="Incorrect User Credentials!!!"
-      />
     </FullHeightContainer>
   );
 };

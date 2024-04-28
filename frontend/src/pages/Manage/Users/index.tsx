@@ -4,39 +4,46 @@ import Loader from "../../../common/Loader";
 import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import routes from "../../../router/routes";
 import { useGetUsers } from "../../../api/users/useUsers";
+import { Link, useNavigate } from "react-router-dom";
 
 const Users = () => {
   const { data, isLoading } = useGetUsers();
+  const navigate = useNavigate();
+
   const columns: GridColDef[] = [
     {
       field: "username",
       headerName: "User Name",
-      minWidth: 150,
+      flex: 1,
+      renderCell: (params) => (
+        <Link to={`${routes.manageUsers()}/${params.row?._id}`}>
+          {params.row?.username}
+        </Link>
+      ),
     },
     {
       field: "email",
       headerName: "Email",
-      minWidth: 200,
+      flex: 1,
     },
     {
       field: "role",
       headerName: "Role",
-      minWidth: 200,
+      flex: 1,
       valueGetter: (params) => params.row?.role?.label,
     },
     {
       field: "status",
       headerName: "Status",
-      minWidth: 200,
+      flex: 1,
       renderCell: (params) => (
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            color: params.row.status === "active" ? "green" : "red",
+            color: params.row.status ? "green" : "red",
           }}
         >
           <Box
@@ -44,28 +51,27 @@ const Users = () => {
               width: 10,
               height: 10,
               borderRadius: "50%",
-              backgroundColor: params.row.status === "active" ? "green" : "red",
+              backgroundColor: params.row.status ? "green" : "red",
               marginRight: 5,
             }}
           />
-          {params.row.status === "active" ? "Active" : "Inactive"}
+          {params.row.status ? "Active" : "Inactive"}
         </Box>
       ),
     },
     {
       field: "action",
       headerName: "Action",
-      minWidth: 100,
+      flex: 1,
       renderCell: (params) => (
         <Box>
-          <IconButton href={routes.editUser()} aria-label="edit">
-            <EditIcon color="info" />
-          </IconButton>
           <IconButton
-            // onClick={() => handleDelete(params.row.id)}
-            aria-label="delete"
+            onClick={() =>
+              navigate(`${routes.manageUsers()}/${params.row?._id}/edit`)
+            }
+            aria-label="edit"
           >
-            <DeleteIcon color="error" />
+            <EditIcon color="info" />
           </IconButton>
         </Box>
       ),
@@ -86,7 +92,9 @@ const Users = () => {
       >
         <Typography variant="h6">All Users</Typography>
         <Button
-          href={routes.createUser()}
+          onClick={() => {
+            navigate(`${routes.manageUsers()}/add`);
+          }}
           variant="contained"
           color="primary"
           startIcon={<AddIcon />}
@@ -108,7 +116,6 @@ const Users = () => {
           },
         }}
         pageSizeOptions={[10]}
-        // checkboxSelection
         disableRowSelectionOnClick
         slots={{
           toolbar: GridToolbar,
@@ -118,9 +125,7 @@ const Users = () => {
             showQuickFilter: true,
           },
         }}
-        style={{
-          minHeight: 300,
-        }}
+        autoHeight
       />
     </Box>
   );

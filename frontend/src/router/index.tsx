@@ -1,6 +1,5 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import {
-  AddUser,
   Attendance,
   Dashboard,
   EditUser,
@@ -125,10 +124,14 @@ export const router = createBrowserRouter([
       },
       {
         path: routes.createUser(),
-        element: <AddUser />,
+        element: <EditUser />,
       },
       {
         path: routes.editUser(),
+        element: <EditUser />,
+      },
+      {
+        path: routes.viewUser(),
         element: <EditUser />,
       },
       {

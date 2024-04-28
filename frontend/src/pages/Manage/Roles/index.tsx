@@ -4,24 +4,32 @@ import Loader from "../../../common/Loader";
 import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import routes from "../../../router/routes";
-import { useGetRoles } from "../../../api/roles/useRoles";
+import { useDeleteRole, useGetRoles } from "../../../api/roles/useRoles";
 import { Link, useNavigate } from "react-router-dom";
+import DeleteButton from "../../../common/DeleteButton";
 
 const Roles = () => {
   const { data, isLoading } = useGetRoles();
+  const { mutateAsync, isPending } = useDeleteRole();
+
   const navigate = useNavigate();
 
   const handleEdit = (id: string) => {
     navigate(`${routes.manageRoles()}/${id}/edit`);
   };
 
+  const handleDelete = async (id: string) => {
+    await mutateAsync({
+      id,
+    });
+  };
+
   const columns: GridColDef[] = [
     {
       field: "name",
       headerName: "Name",
-      minWidth: 150,
+      flex: 1,
       renderCell: (params) => (
         <Link to={`${routes.manageRoles()}/${params.row._id}`}>
           {params?.row?.name}
@@ -31,12 +39,12 @@ const Roles = () => {
     {
       field: "label",
       headerName: "Label",
-      minWidth: 150,
+      flex: 1,
     },
     {
       field: "action",
       headerName: "Action",
-      minWidth: 150,
+      flex: 1,
       renderCell: (params) => (
         <Box>
           <IconButton
@@ -46,16 +54,15 @@ const Roles = () => {
             <EditIcon color="info" />
           </IconButton>
 
-          <IconButton
-            aria-label="delete"
+          <DeleteButton
+            onDelete={() => handleDelete(params.row._id)}
+            loading={isPending}
             disabled={
               params.row?.name === "employee" ||
               params.row?.name === "super-admin" ||
               params.row?.name === "admin"
             }
-          >
-            <DeleteIcon color="error" />
-          </IconButton>
+          />
         </Box>
       ),
     },
@@ -99,7 +106,6 @@ const Roles = () => {
           },
         }}
         pageSizeOptions={[10]}
-        // checkboxSelection
         disableRowSelectionOnClick
         slots={{
           toolbar: GridToolbar,
@@ -109,9 +115,7 @@ const Roles = () => {
             showQuickFilter: true,
           },
         }}
-        style={{
-          minHeight: 300,
-        }}
+        autoHeight
       />
     </Box>
   );

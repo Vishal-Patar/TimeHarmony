@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ssoApiService } from "../services/ssoApiService";
 import { USER_PATH } from "./path";
 import { enqueueSnackbar } from "notistack";
@@ -35,8 +35,8 @@ export const useRegisterUser = () => {
         variant: "success",
       });
     },
-    onError: (error) => {
-      enqueueSnackbar(error?.message ?? "Error", {
+    onError: (error: any) => {
+      enqueueSnackbar(error?.response?.data?.message ?? "Error", {
         variant: "error",
       });
     },
@@ -59,8 +59,46 @@ export const useLoginUser = () => {
         variant: "success",
       });
     },
-        onError: (error) => {
-      enqueueSnackbar(error?.message ?? "Error", {
+    onError: (error: any) => {
+      enqueueSnackbar(error?.response?.data?.message ?? "Error", {
+        variant: "error",
+      });
+    },
+  });
+};
+
+export const useGetUserById = (Id: string) => {
+  const getUserById = async () => {
+    const { data } = await ssoApiService().get(USER_PATH.USER_LIST + "/" + Id);
+    return data;
+  };
+
+  return useQuery({
+    queryKey: ["useGetUserById"],
+    queryFn: getUserById,
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  const updateUser = async (id: string, request: any) => {
+    const { data } = await ssoApiService().patch(
+      `${USER_PATH.USER_LIST}/${id}`,
+      request
+    );
+
+    return data;
+  };
+  return useMutation({
+    mutationFn: (request: any) => updateUser(request?.id, request?.data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["useGetUsers"] });
+      enqueueSnackbar(data?.message ?? "Updated Successfully", {
+        variant: "success",
+      });
+    },
+    onError: (error: any) => {
+      enqueueSnackbar(error?.response?.data?.message ?? "Error", {
         variant: "error",
       });
     },
