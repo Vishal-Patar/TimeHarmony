@@ -1,21 +1,32 @@
-import { Autocomplete, Box, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  FormControlLabel,
+  Switch,
+  TextField,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   useGetEmployeeById,
   useGetEmployees,
   useUpdateEmployee,
 } from "../../../api/employees/useEmployees";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Button from "../../../common/Button";
 import { useGetDesignations } from "../../../api/designations/useDesingations";
 import { useGetDepartments } from "../../../api/departments/useDepartments";
 import routes from "../../../router/routes";
 import Loader from "../../../common/Loader";
+import { ModeType } from "../../../types/common";
 
 const Edit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [mode, setMode] = useState<ModeType>("view");
+  const location = useLocation();
+  const readOnly = mode === "view";
+
   const { data: employee, isFetching } = useGetEmployeeById(id ?? "");
   const { mutateAsync, isPending } = useUpdateEmployee();
   const { data: designationList, isFetching: desingationFetching } =
@@ -34,13 +45,20 @@ const Edit = () => {
   } = useForm();
 
   useEffect(() => {
+    if (id && location?.pathname?.includes("edit")) {
+      setMode("edit");
+    } else if (id === "add") {
+      setMode("add");
+    } else {
+      setMode("view");
+    }
+  }, [id, location?.pathname]);
+
+  useEffect(() => {
     setLoading(true);
     if (employee) {
       setValue("name", employee.name);
       setValue("address", employee.address);
-      setValue("designation", employee.designation);
-      setValue("department", employee.department);
-      setValue("reportingManager", employee.reportingManager);
     }
     setLoading(false);
   }, [employee, setValue]);
@@ -74,8 +92,22 @@ const Edit = () => {
             alignItems: "center",
           }}
         >
+          <FormControlLabel
+            control={
+              <Switch
+                color="success"
+                defaultChecked={employee?.status}
+                inputProps={{ "aria-label": "controlled" }}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setValue("status", event.target?.checked);
+                }}
+                disabled={readOnly}
+              />
+            }
+            label="Status"
+          />
           <Button variant="contained" onClick={() => navigate(-1)}>
-            Cancel
+            {mode === "view" ? "Back" : "Cancel"}
           </Button>
 
           <Button
@@ -83,8 +115,12 @@ const Edit = () => {
             color="success"
             type="submit"
             loading={isPending}
+            disabled={mode === "view"}
+            sx={{
+              display: mode === "view" ? "none" : "block",
+            }}
           >
-            Save
+            {mode === "edit" ? "Update" : "Save"}
           </Button>
         </Box>
 
@@ -96,6 +132,7 @@ const Edit = () => {
           {...register("name", { required: "Name is required" })}
           error={!!errors.username}
           helperText={errors?.username?.message?.toString()}
+          inputProps={{ readOnly }}
         />
         <TextField
           label="address"
@@ -103,16 +140,18 @@ const Edit = () => {
           fullWidth
           multiline
           {...register("address")}
+          inputProps={{ readOnly }}
         />
         <Autocomplete
           disablePortal
-          // id="employee-designation"
+          id="employee-designation"
           options={designationList}
           autoSelect
           getOptionKey={(option: any) => option?._id}
           onChange={(e, val: any) => {
             setValue("designation", val?._id, { shouldDirty: true });
           }}
+          readOnly={readOnly}
           defaultValue={employee?.designation}
           renderInput={(params) => (
             <TextField
@@ -134,6 +173,7 @@ const Edit = () => {
           onChange={(e, val: any) => {
             setValue("department", val?._id, { shouldDirty: true });
           }}
+          readOnly={readOnly}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -155,6 +195,7 @@ const Edit = () => {
           onChange={(e, val: any) => {
             setValue("reportingManager", val?._id, { shouldDirty: true });
           }}
+          readOnly={readOnly}
           renderInput={(params) => (
             <TextField
               {...params}

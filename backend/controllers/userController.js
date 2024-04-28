@@ -37,7 +37,7 @@ const register = asyncHandler(async (req, res) => {
       password: hashedPassword,
       role: roleObject._id,
       status,
-    });
+    }).populate("role");
     if (user) {
       // Create the employee record linked to the user ID
       const employee = new Employee({ user: user._id, name: user.username });
@@ -56,9 +56,12 @@ const register = asyncHandler(async (req, res) => {
         { expiresIn: "15m" }
       );
 
-      res
-        .status(201)
-        .json({accessToken, user, employee });
+      res.status(201).json({
+        accessToken,
+        user,
+        employee,
+        message: "Registered Successfully",
+      });
     } else {
       res.status(400);
       throw new Error("User data is not valid");
@@ -67,7 +70,6 @@ const register = asyncHandler(async (req, res) => {
     console.log("errpr", error);
     throw new Error(error);
   }
-  res.json({ message: "Register the user" });
 });
 
 //@desc Login user
@@ -79,9 +81,15 @@ const login = asyncHandler(async (req, res, next) => {
     res.status(400);
     throw new Error("All fields are mandatory!");
   }
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate("role");
   //compare password with hashedpassword
   if (user && (await compare(password, user.password))) {
+    if (user.status !== "active") {
+      // Check if user status is not "active"
+      res.status(403);
+      throw new Error("User is not active. Please contact support.");
+    }
+    
     const accessToken = sign(
       {
         user: {
@@ -96,7 +104,12 @@ const login = asyncHandler(async (req, res, next) => {
 
     const employee = await Employee.findOne({ user: user?.id });
 
-    res.status(200).json({ accessToken, user, employee });
+    res.status(200).json({
+      accessToken,
+      user,
+      employee,
+      message: "Logged In Successfully",
+    });
   } else {
     res.status(401);
     throw new Error("email or password is not valid");

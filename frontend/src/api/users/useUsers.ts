@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ssoApiService } from "../services/ssoApiService";
 import { USER_PATH } from "./path";
+import { enqueueSnackbar } from "notistack";
 
 export const useGetUsers = () => {
   const getUsers = async () => {
@@ -28,11 +29,16 @@ export const useRegisterUser = () => {
     mutationFn: registerUser,
     onSuccess: (data) => {
       if (data?.accessToken) {
-        updateLocalStorage(data)
+        updateLocalStorage(data);
       }
+      enqueueSnackbar(data?.message ?? "Successful", {
+        variant: "success",
+      });
     },
-    onError: (error, variables, context) => {
-      console.log(error, variables, context);
+    onError: (error) => {
+      enqueueSnackbar(error?.message ?? "Error", {
+        variant: "error",
+      });
     },
   });
 };
@@ -47,8 +53,16 @@ export const useLoginUser = () => {
     mutationFn: loginUser,
     onSuccess: (data) => {
       if (data?.accessToken) {
-        updateLocalStorage(data)
+        updateLocalStorage(data);
       }
+      enqueueSnackbar(data?.message ?? "Successful", {
+        variant: "success",
+      });
+    },
+        onError: (error) => {
+      enqueueSnackbar(error?.message ?? "Error", {
+        variant: "error",
+      });
     },
   });
 };

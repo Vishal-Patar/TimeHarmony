@@ -1,4 +1,11 @@
-import { Box, Card, CardContent, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useGetLeaveTypes, useGetMyLeave } from "../../api/leaves/useLeaves";
 import Button from "../../common/Button";
@@ -19,8 +26,8 @@ const Leave = () => {
 
   const { data, isLoading } = useGetMyLeave(employee?._id);
   const navigate = useNavigate();
-  
-  if(isLoading) return <Loader />
+
+  if (isLoading) return <Loader />;
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -35,13 +42,7 @@ const Leave = () => {
         Apply Leave
       </Button>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: 2,
-        }}
-      >
+      <Grid container spacing={4}>
         {data?.map(
           ({
             name,
@@ -52,28 +53,44 @@ const Leave = () => {
             usedDays,
             availableDays,
           }: any) => (
-            <Card
-              key={name + _id}
-              sx={{
-                textAlign: "center",
-              }}
-            >
-              <CardContent>
-                <Typography variant="h5">{label}</Typography>
-                <CircularProgress
-                  variant="determinate"
-                  value={(availableDays / allowedDays) * 100}
-                />
-                <Typography variant="subtitle1">
-                  Available: {allowedDays}
-                </Typography>
-                <Typography variant="subtitle1">Used: {usedDays}</Typography>
-                <Typography variant="subtitle1">{description}</Typography>
-              </CardContent>
-            </Card>
+            <Grid item xs={12} sm={6} md={4}>
+              <Card
+                key={name + _id}
+                sx={{
+                  textAlign: "center",
+                }}
+              >
+                <CardContent>
+                  <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                      <Typography variant="h4">{label}</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <CircularProgress
+                        variant="determinate"
+                        value={(availableDays / allowedDays) * 100}
+                        size={200}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1">
+                        Available: {allowedDays}
+                      </Typography>
+                      <Typography variant="subtitle1">
+                        Used: {usedDays}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1">{description}</Typography>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
           )
         )}
-      </Box>
+      </Grid>
     </Box>
   );
 };

@@ -80,6 +80,10 @@ export const router = createBrowserRouter([
         element: <EmployeeEdit />,
       },
       {
+        path: routes.employeeView(),
+        element: <EmployeeEdit />,
+      },
+      {
         path: routes.employeeDesignations(),
         element: <Designation />,
       },

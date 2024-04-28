@@ -46,7 +46,14 @@ const Roles = () => {
             <EditIcon color="info" />
           </IconButton>
 
-          <IconButton aria-label="delete">
+          <IconButton
+            aria-label="delete"
+            disabled={
+              params.row?.name === "employee" ||
+              params.row?.name === "super-admin" ||
+              params.row?.name === "admin"
+            }
+          >
             <DeleteIcon color="error" />
           </IconButton>
         </Box>

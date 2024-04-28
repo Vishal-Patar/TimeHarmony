@@ -19,7 +19,11 @@ const employeeSchema = Schema(
     },
     reportingManager: {
       type: Schema.Types.ObjectId,
-      ref: 'Employee', // Reference to another Employee document
+      ref: "Employee", // Reference to another Employee document
+    },
+    status: {
+      type: Boolean,
+      default: true,
     },
   },
   {

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ssoApiService } from "../services/ssoApiService";
 import { ROLE_PATH } from "./path";
+import { enqueueSnackbar } from "notistack";
 
 export const useGetRoles = () => {
   const getRoles = async () => {
@@ -30,6 +31,10 @@ export const useGetRoleById = (Id: string) => {
 export const useUpdateRoles = () => {
   const queryClient = useQueryClient();
   const updateRoles = async (id: string, request: any) => {
+    if (!id) {
+      throw new Error("Role ID is required.");
+    }
+
     const { data } = await ssoApiService().patch(
       `${ROLE_PATH.ROLE_LIST}/${id}`,
       request
@@ -41,6 +46,37 @@ export const useUpdateRoles = () => {
     mutationFn: (request: any) => updateRoles(request?.id, request?.data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["useGetRoles"] });
+      enqueueSnackbar("Updated Successfully", {
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error?.message ?? "Error", {
+        variant: "error",
+      });
+    },
+  });
+};
+
+export const useCreateRole = () => {
+  const queryClient = useQueryClient();
+  const createRole = async (request: any) => {
+    const { data } = await ssoApiService().post(ROLE_PATH.ROLE_CREATE, request);
+
+    return data;
+  };
+  return useMutation({
+    mutationFn: createRole,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["useCreateRole"] });
+      enqueueSnackbar("Created Successfully", {
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error?.message ?? "Error", {
+        variant: "error",
+      });
     },
   });
 };

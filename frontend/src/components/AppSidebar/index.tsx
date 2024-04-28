@@ -36,7 +36,7 @@ const AppSidebar = () => {
         icon,
         childMenu,
         mainMenu,
-        onClick
+        onClick,
     }: ListItemsProps) => {
         return (
             <Tooltip title={isDrawerOpen ? '' : label} arrow placement='right' >
@@ -125,7 +125,7 @@ const AppSidebar = () => {
             <Divider />
 
             <List>
-                {MenuItems().map(({ name, icon, label, targetLink, submenu, activeBasePath }, index) => (
+                {MenuItems().map(({ name, icon, label, targetLink, submenu, activeBasePath, sectionId }, index) => (
                     <ListItem key={`${name}-${index}`} disablePadding sx={{ display: 'block' }}>
                         {
                             submenu?.length ? (

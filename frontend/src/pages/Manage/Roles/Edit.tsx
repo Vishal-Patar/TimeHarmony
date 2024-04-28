@@ -1,12 +1,15 @@
 import { Box, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../common/Button";
 import Loader from "../../../common/Loader";
 import routes from "../../../router/routes";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useGetRoleById, useUpdateRoles } from "../../../api/roles/useRoles";
-import { rolePermissions } from "./helper";
+import {
+  useCreateRole,
+  useGetRoleById,
+  useUpdateRoles,
+} from "../../../api/roles/useRoles";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -23,6 +26,7 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid";
 import { ModeType } from "../../../types/common";
+import { rolePermissions } from "../../../helper/permissionList";
 
 const Edit = () => {
   const { id } = useParams();
@@ -33,6 +37,8 @@ const Edit = () => {
     mode === "add" || !id ? "" : id
   );
   const { mutateAsync, isPending } = useUpdateRoles();
+  const { mutateAsync: mutateCreateAsync, isPending: isCreatePending } =
+    useCreateRole();
   const [rows, setRows] = useState<any>(rolePermissions);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const readOnly = mode === "view";
@@ -168,14 +174,20 @@ const Edit = () => {
     setLoading(false);
   }, [role, setValue]);
 
-  const onSubmit = async (data: any) => {
-    await mutateAsync({
-      id: role?._id,
-      data: {
-        ...data,
-        permissions: rows,
-      },
-    });
+  const onSubmit = async (formData: any) => {
+    const data = {
+      ...formData,
+      permissions: rows,
+    };
+    if (mode === "edit") {
+      await mutateAsync({
+        id: role?._id,
+        data,
+      });
+    } else {
+      await mutateCreateAsync(data);
+    }
+
     navigate(routes.manageRoles());
   };
 
@@ -195,14 +207,14 @@ const Edit = () => {
           }}
         >
           <Button variant="contained" onClick={() => navigate(-1)}>
-            {mode === "view" ? "BacK" : "Cancel"}
+            {mode === "view" ? "Back" : "Cancel"}
           </Button>
 
           <Button
             variant="contained"
             color="success"
             type="submit"
-            loading={isPending}
+            loading={isPending || isCreatePending}
             disabled={mode === "view"}
             sx={{
               display: mode === "view" ? "none" : "block",
@@ -220,7 +232,13 @@ const Edit = () => {
           {...register("name", { required: "Name is required" })}
           error={!!errors.name}
           helperText={errors?.name?.message?.toString()}
-          inputProps={{ readOnly }}
+          inputProps={{
+            readOnly:
+              readOnly ||
+              role?.name === "employee" ||
+              role?.name === "super-admin" ||
+              role?.name === "admin",
+          }}
         />
 
         <TextField

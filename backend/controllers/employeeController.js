@@ -4,10 +4,13 @@ import Employee from "../models/employeeModel.js";
 const getEmployees = asyncHandler(async (req, res) => {
   try {
     const employees = await Employee.find()
-      .populate("user")
       .populate("designation")
       .populate("reportingManager")
-      .populate("department");
+      .populate("department")
+      .populate({
+        path: "user",
+        populate: { path: "role" },
+      });
 
     res.status(200).json(employees);
   } catch (error) {
@@ -18,8 +21,15 @@ const getEmployees = asyncHandler(async (req, res) => {
 
 const createEmployee = asyncHandler(async (req, res) => {
   try {
-    const { user, name, address, department,designation, reportingManager} =
-      req.body;
+    const {
+      user,
+      name,
+      address,
+      department,
+      designation,
+      reportingManager,
+      status,
+    } = req.body;
     const employee = new Employee({
       user,
       name,
@@ -27,6 +37,7 @@ const createEmployee = asyncHandler(async (req, res) => {
       department,
       designation,
       reportingManager,
+      status,
     });
     await employee.save();
     res
@@ -43,7 +54,11 @@ const getEmployeeById = asyncHandler(async (req, res) => {
     const employee = await Employee.findById(req.params.id)
       .populate("designation")
       .populate("reportingManager")
-      .populate("department");
+      .populate("department")
+      .populate({
+        path: "user",
+        populate: { path: "role" },
+      });
 
     if (!employee) {
       return res.status(404).json({ message: "Employee not found" });
@@ -60,7 +75,12 @@ const getEmployeeByUserId = asyncHandler(async (req, res) => {
     const userId = req.params.userId;
     const employee = await Employee.findOne({ user: userId })
       .populate("designation")
-      .populate("department");
+      .populate("reportingManager")
+      .populate("department")
+      .populate({
+        path: "user",
+        populate: { path: "role" },
+      });
 
     if (!employee) {
       return res.status(404).json({ message: "Employee not found" });
@@ -90,7 +110,7 @@ const deleteEmployee = asyncHandler(async (req, res) => {
 
 const updateEmployee = asyncHandler(async (req, res) => {
   try {
-    const { name, address, designation, department, reportingManager } =
+    const { name, address, designation, department, reportingManager, status } =
       req.body;
 
     // Create an update object with the fields to be updated
@@ -100,6 +120,7 @@ const updateEmployee = asyncHandler(async (req, res) => {
     if (designation) updateObj.designation = designation;
     if (department) updateObj.department = department;
     if (reportingManager) updateObj.reportingManager = reportingManager;
+    if (status !== undefined || status !== null) updateObj.status = status;
     // Add other fields to updateObj as needed
 
     const updatedEmployee = await Employee.findByIdAndUpdate(

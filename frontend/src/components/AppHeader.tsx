@@ -32,6 +32,8 @@ const AppHeader = () => {
     sessionStorage.removeItem("accessToken");
     localStorage.removeItem("user");
     sessionStorage.removeItem("user");
+    localStorage.removeItem("employee");
+    sessionStorage.removeItem("employee");
     navigate(routes.login());
     handleClose();
   };

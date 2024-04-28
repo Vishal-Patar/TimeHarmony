@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ssoApiService } from "../services/ssoApiService";
 import { EMPLOYEE_PATH } from "./path";
+import { enqueueSnackbar } from "notistack";
 
 interface GetByUserID {
   userId: string;
@@ -60,6 +61,14 @@ export const useUpdateEmployee = () => {
     mutationFn: (request: any) => updateEmployee(request?.id, request?.data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["useGetEmployees"] });
+      enqueueSnackbar(data?.message ?? "Updated Successfully", {
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error?.message ?? "Error", {
+        variant: "error",
+      });
     },
   });
 };
