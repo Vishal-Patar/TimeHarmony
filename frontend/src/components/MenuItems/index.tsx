@@ -14,6 +14,16 @@ import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import routes from "../../router/routes";
 import { checkReadAccess } from "../../helper/permission";
 
+interface ListItem {
+  name: string;
+  label: string;
+  sectionId: number;
+  targetLink: string;
+  icon: React.ReactNode;
+  submenu?: ListItem[];
+  activeBasePath?: string;
+}
+
 export const MenuItems = () => {
   const theme = useTheme();
   const list = [
@@ -243,6 +253,23 @@ export const MenuItems = () => {
       ],
     },
   ];
-//   return list.filter((item) => checkReadAccess(item.sectionId));
-  return list;
+
+  const filterList = (list: ListItem[]): ListItem[] => {
+    return list.reduce((filtered: ListItem[], item) => {
+      if (checkReadAccess(item.sectionId)) {
+        const newItem = { ...item };
+        if (newItem.submenu) {
+          // Check if submenu is defined before filtering it
+          newItem.submenu = filterList(newItem.submenu);
+        }
+        filtered.push(newItem);
+      }
+      return filtered;
+    }, []);
+  };
+
+  const filteredList = filterList(list);
+
+  return filteredList;
+  // return list;
 };

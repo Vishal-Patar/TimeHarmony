@@ -69,7 +69,7 @@ const Leave = () => {
                       <CircularProgress
                         variant="determinate"
                         value={(availableDays / allowedDays) * 100}
-                        size={200}
+                        size={100}
                       />
                     </Grid>
 

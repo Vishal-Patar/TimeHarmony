@@ -6,8 +6,14 @@ import Loader from "../../../common/Loader";
 import { useGetEmployees } from "../../../api/employees/useEmployees";
 import { Link, useNavigate } from "react-router-dom";
 import routes from "../../../router/routes";
+import useCheckAccess from "../../../helper/useCheckAccess";
+import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+
+const SECTION_ID = 7;
 
 const Employee = () => {
+  const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
+
   const { data, isLoading } = useGetEmployees();
   const navigate = useNavigate();
 
@@ -99,6 +105,8 @@ const Employee = () => {
     },
   ];
 
+  if (!hasReadAccess) return <UnauthorizedAccessCard />;
+
   if (isLoading) return <Loader />;
 
   return (
@@ -135,6 +143,9 @@ const Employee = () => {
           toolbar: {
             showQuickFilter: true,
           },
+        }}
+        columnVisibilityModel={{
+          action: hasWriteAccess,
         }}
         autoHeight
       />

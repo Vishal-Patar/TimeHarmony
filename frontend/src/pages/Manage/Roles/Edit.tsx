@@ -27,8 +27,13 @@ import {
 } from "@mui/x-data-grid";
 import { ModeType } from "../../../types/common";
 import { rolePermissions } from "../../../helper/permissionList";
+import useCheckAccess from "../../../helper/useCheckAccess";
+import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+
+const SECTION_ID = 14;
 
 const Edit = () => {
+  const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,7 +52,7 @@ const Edit = () => {
   useEffect(() => {
     if (id && location?.pathname?.includes("edit")) {
       setMode("edit");
-    } else if (id === "add") {
+    } else if (location?.pathname?.includes("add")) {
       setMode("add");
     } else {
       setMode("view");
@@ -190,6 +195,13 @@ const Edit = () => {
 
     navigate(routes.manageRoles());
   };
+
+  if (
+    !hasReadAccess ||
+    ((mode === "edit" || mode === "add") && !hasWriteAccess)
+  ) {
+    return <UnauthorizedAccessCard />;
+  }
 
   if (isFetching || loading) {
     return <Loader />;

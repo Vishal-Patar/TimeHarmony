@@ -1,25 +1,31 @@
 import React from "react";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Loader from "../../../common/Loader";
-import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { useGetDesignations } from "../../../api/designations/useDesingations";
+import useCheckAccess from "../../../helper/useCheckAccess";
+import DeleteButton from "../../../common/DeleteButton";
+import routes from "../../../router/routes";
+import { Link } from "react-router-dom";
+import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+
+const SECTION_ID = 8;
 
 const Designation = () => {
+  const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
   const { data, isLoading } = useGetDesignations();
   const columns: GridColDef[] = [
     {
       field: "label",
       headerName: "Label",
-      minWidth: 400,
+      flex: 1,
     },
     {
       field: "name",
       headerName: "Name",
-      minWidth: 400,
+      flex: 1,
     },
     {
       field: "action",
@@ -30,16 +36,18 @@ const Designation = () => {
           <IconButton aria-label="edit">
             <EditIcon color="info" />
           </IconButton>
-          <IconButton
-            // onClick={() => handleDelete(params.row.id)}
-            aria-label="delete"
-          >
-            <DeleteIcon color="error" />
-          </IconButton>
+          <DeleteButton
+            onDelete={() => {
+              // handleDelete(params.row._id)
+            }}
+            // loading={isPending}
+          />
         </Box>
       ),
     },
   ];
+
+  if (!hasReadAccess) return <UnauthorizedAccessCard />;
 
   if (isLoading) return <Loader />;
 
@@ -54,13 +62,17 @@ const Designation = () => {
         }}
       >
         <Typography variant="h6">All Designations</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-        >
-          Add New
-        </Button>
+        {hasWriteAccess && (
+          <Button
+            component={Link}
+            to={`${routes.employeeDepartment()}/add`}
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+          >
+            Add New
+          </Button>
+        )}
       </Box>
 
       <DataGrid
@@ -86,9 +98,10 @@ const Designation = () => {
             showQuickFilter: true,
           },
         }}
-        style={{
-          minHeight: 300,
+        columnVisibilityModel={{
+          action: hasWriteAccess,
         }}
+        autoHeight
       />
     </Box>
   );

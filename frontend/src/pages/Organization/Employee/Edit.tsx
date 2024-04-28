@@ -19,8 +19,13 @@ import { useGetDepartments } from "../../../api/departments/useDepartments";
 import routes from "../../../router/routes";
 import Loader from "../../../common/Loader";
 import { ModeType } from "../../../types/common";
+import useCheckAccess from "../../../helper/useCheckAccess";
+import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+
+const SECTION_ID = 7;
 
 const Edit = () => {
+  const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
   const { id } = useParams();
   const navigate = useNavigate();
   const [mode, setMode] = useState<ModeType>("view");
@@ -47,7 +52,7 @@ const Edit = () => {
   useEffect(() => {
     if (id && location?.pathname?.includes("edit")) {
       setMode("edit");
-    } else if (id === "add") {
+    } else if (location?.pathname?.includes("add")) {
       setMode("add");
     } else {
       setMode("view");
@@ -70,6 +75,13 @@ const Edit = () => {
     });
     navigate(routes.employee());
   };
+
+  if (
+    !hasReadAccess ||
+    ((mode === "edit" || mode === "add") && !hasWriteAccess)
+  ) {
+    return <UnauthorizedAccessCard />;
+  }
 
   if (
     loading ||

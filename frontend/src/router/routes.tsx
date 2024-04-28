@@ -23,9 +23,9 @@ const routes = {
   editUser: () => "/manage/users/:id/edit",
   viewUser: () => "/manage/users/:id",
   manageRoles: () => "/manage/roles",
+  manageRolesAdd: () => "/manage/roles/add",
   manageRolesEdit: () => "/manage/roles/:id/edit",
   manageRolesView: () => "/manage/roles/:id",
-  manageRolesAdd: () => "/manage/roles/add",
 };
 
 export default routes;

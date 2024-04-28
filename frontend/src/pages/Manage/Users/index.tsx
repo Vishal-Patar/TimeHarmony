@@ -1,15 +1,20 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import Loader from "../../../common/Loader";
-import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import routes from "../../../router/routes";
 import { useGetUsers } from "../../../api/users/useUsers";
 import { Link, useNavigate } from "react-router-dom";
+import useCheckAccess from "../../../helper/useCheckAccess";
+import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+
+const SECTION_ID = 13;
 
 const Users = () => {
+  const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
   const { data, isLoading } = useGetUsers();
+
   const navigate = useNavigate();
 
   const columns: GridColDef[] = [
@@ -78,6 +83,8 @@ const Users = () => {
     },
   ];
 
+  if (!hasReadAccess) return <UnauthorizedAccessCard />;
+
   if (isLoading) return <Loader />;
 
   return (
@@ -91,16 +98,17 @@ const Users = () => {
         }}
       >
         <Typography variant="h6">All Users</Typography>
-        <Button
-          onClick={() => {
-            navigate(`${routes.manageUsers()}/add`);
-          }}
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-        >
-          Add New
-        </Button>
+        {hasWriteAccess && (
+          <Button
+            component={Link}
+            to={`${routes.manageUsers()}/add`}
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+          >
+            Add New
+          </Button>
+        )}
       </Box>
 
       <DataGrid
@@ -124,6 +132,9 @@ const Users = () => {
           toolbar: {
             showQuickFilter: true,
           },
+        }}
+        columnVisibilityModel={{
+          action: hasWriteAccess,
         }}
         autoHeight
       />

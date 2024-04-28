@@ -8,8 +8,14 @@ import routes from "../../../router/routes";
 import { useDeleteRole, useGetRoles } from "../../../api/roles/useRoles";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteButton from "../../../common/DeleteButton";
+import useCheckAccess from "../../../helper/useCheckAccess";
+import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+
+const SECTION_ID = 14;
 
 const Roles = () => {
+  const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
+
   const { data, isLoading } = useGetRoles();
   const { mutateAsync, isPending } = useDeleteRole();
 
@@ -68,6 +74,8 @@ const Roles = () => {
     },
   ];
 
+  if (!hasReadAccess) return <UnauthorizedAccessCard />;
+
   if (isLoading) return <Loader />;
 
   return (
@@ -81,16 +89,19 @@ const Roles = () => {
         }}
       >
         <Typography variant="h6">All Roles</Typography>
-        <Button
-          onClick={() => {
-            navigate(`${routes.manageRoles()}/add`);
-          }}
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-        >
-          Add New
-        </Button>
+
+        {hasWriteAccess && (
+          <Button
+            onClick={() => {
+              navigate(`${routes.manageRoles()}/add`);
+            }}
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+          >
+            Add New
+          </Button>
+        )}
       </Box>
 
       <DataGrid
@@ -114,6 +125,9 @@ const Roles = () => {
           toolbar: {
             showQuickFilter: true,
           },
+        }}
+        columnVisibilityModel={{
+          action: hasWriteAccess,
         }}
         autoHeight
       />

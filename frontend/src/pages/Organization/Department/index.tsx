@@ -1,45 +1,54 @@
 import React from "react";
 import { useGetDepartments } from "../../../api/departments/useDepartments";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Loader from "../../../common/Loader";
-import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
+import useCheckAccess from "../../../helper/useCheckAccess";
+import { Link } from "react-router-dom";
+import routes from "../../../router/routes";
+import DeleteButton from "../../../common/DeleteButton";
+import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+
+const SECTION_ID = 9;
 
 const Department = () => {
+  const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
+
   const { data, isLoading } = useGetDepartments();
   const columns: GridColDef[] = [
     {
       field: "label",
       headerName: "Label",
-      minWidth: 400,
+      flex: 1,
     },
     {
       field: "name",
       headerName: "Name",
-      minWidth: 400,
+      flex: 1,
     },
     {
       field: "action",
       headerName: "Action",
-      minWidth: 100,
+      flex: 1,
       renderCell: (params) => (
         <Box>
           <IconButton aria-label="edit">
             <EditIcon color="info" />
           </IconButton>
-          <IconButton
-            // onClick={() => handleDelete(params.row.id)}
-            aria-label="delete"
-          >
-            <DeleteIcon color="error" />
-          </IconButton>
+          <DeleteButton
+            onDelete={() => {
+              // handleDelete(params.row._id)
+            }}
+            // loading={isPending}
+          />
         </Box>
       ),
     },
   ];
+
+  if (!hasReadAccess) return <UnauthorizedAccessCard />;
 
   if (isLoading) return <Loader />;
 
@@ -54,13 +63,17 @@ const Department = () => {
         }}
       >
         <Typography variant="h6">All Departments</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-        >
-          Add New
-        </Button>
+        {hasWriteAccess && (
+          <Button
+            component={Link}
+            to={`${routes.employeeDepartment()}/add`}
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+          >
+            Add New
+          </Button>
+        )}
       </Box>
 
       <DataGrid
@@ -76,7 +89,6 @@ const Department = () => {
           },
         }}
         pageSizeOptions={[10]}
-        // checkboxSelection
         disableRowSelectionOnClick
         slots={{
           toolbar: GridToolbar,
@@ -86,9 +98,10 @@ const Department = () => {
             showQuickFilter: true,
           },
         }}
-        style={{
-          minHeight: 300,
+        columnVisibilityModel={{
+          action: hasWriteAccess,
         }}
+        autoHeight
       />
     </Box>
   );
