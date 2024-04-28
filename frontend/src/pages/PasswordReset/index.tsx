@@ -6,8 +6,10 @@ import {
   Typography,
   Container,
   CssBaseline,
+  Box,
 } from "@mui/material";
 import { FullHeightContainer } from "../style";
+import { Footer } from "../../components";
 
 const PasswordReset: React.FC = () => {
   // const [email, setEmail] = useState("");
@@ -24,7 +26,7 @@ const PasswordReset: React.FC = () => {
     <FullHeightContainer>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div>
+        <Box>
           <Typography variant="h5" align="center" gutterBottom>
             Please Contact Your Administrator
           </Typography>
@@ -63,8 +65,9 @@ const PasswordReset: React.FC = () => {
               </Typography>
             </form>
           )} */}
-        </div>
+        </Box>
       </Container>
+      <Footer />
     </FullHeightContainer>
   );
 };

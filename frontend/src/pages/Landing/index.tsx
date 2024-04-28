@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Container, CssBaseline, Typography } from '@mui/material';
 import { FullHeightContainer } from '../style';
+import { Footer } from '../../components';
 
 const Landing = () => {
   return (
@@ -26,6 +27,7 @@ const Landing = () => {
           </div>
         </div>
       </Container>
+      <Footer />
     </FullHeightContainer>
   );
 };

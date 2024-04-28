@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import Button from '../../common/Button';
 import { useRegisterUser } from '../../api/users/useUsers';
 import routes from '../../router/routes';
+import { Footer } from '../../components';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -21,7 +22,7 @@ const Register = () => {
     return (
         <FullHeightContainer maxWidth="xs">
             <CssBaseline />
-            <div>
+            <Box>
                 <Typography variant="h5" align="center">
                     Register
                 </Typography>
@@ -71,7 +72,8 @@ const Register = () => {
                 <Typography variant="body2" align="center" style={{ marginTop: '16px' }}>
                     Already have an account? <Link to="/login">Login here</Link>
                 </Typography>
-            </div>
+            </Box>
+            <Footer />
         </FullHeightContainer>
     );
 };

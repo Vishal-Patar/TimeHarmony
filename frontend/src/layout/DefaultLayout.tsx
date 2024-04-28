@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { AppHeader, AppSidebar } from "../components";
+import { AppHeader, AppSidebar, Footer } from "../components";
 import { Outlet, useNavigate } from "react-router-dom";
 import routes from "../router/routes";
 import { useEffect, useState } from "react";
@@ -12,7 +12,11 @@ const DefaultLayout = () => {
   const accessToken = localStorage?.getItem("accessToken");
 
   useEffect(() => {
-    if (accessToken && accessToken !== undefined && accessToken !== 'undefined' ) {
+    if (
+      accessToken &&
+      accessToken !== undefined &&
+      accessToken !== "undefined"
+    ) {
       setLoading(false);
     } else {
       navigate(routes.login());
@@ -33,6 +37,7 @@ const DefaultLayout = () => {
               <Outlet />
             </Box>
           </Box>
+          <Footer />
         </Box>
       )}
     </>

@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useLoginUser } from "../../api/users/useUsers";
 import Button from "../../common/Button";
 import routes from "../../router/routes";
+import { Footer } from "../../components";
 
 const Login = () => {
   const {
@@ -89,6 +90,7 @@ const Login = () => {
           Don't have an account? <Link to="/register">Register here</Link>
         </Typography>
       </Box>
+      <Footer />
     </FullHeightContainer>
   );
 };
