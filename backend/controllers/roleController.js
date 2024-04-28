@@ -91,4 +91,18 @@ const getRoleByName = asyncHandler(async (req, res) => {
   }
 });
 
-export { createRole, getRoles, deleteRole, updateRole, getRoleByName };
+const getRoleById = asyncHandler(async (req, res) => {
+  try {
+    const role = await Role.findById(req.params.id);
+    if (!role) {
+      return res.status(404).send("Role not found");
+    }
+
+    res.status(200).json(role);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error fetching role");
+  }
+});
+
+export { createRole, getRoles, deleteRole, updateRole, getRoleByName, getRoleById };

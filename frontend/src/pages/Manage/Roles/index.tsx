@@ -7,23 +7,30 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import routes from "../../../router/routes";
 import { useGetRoles } from "../../../api/roles/useRoles";
+import { Link, useNavigate } from "react-router-dom";
 
 const Roles = () => {
   const { data, isLoading } = useGetRoles();
+  const navigate = useNavigate();
+
+  const handleEdit = (id: string) => {
+    navigate(`${routes.manageRoles()}/${id}/edit`);
+  };
+
   const columns: GridColDef[] = [
     {
       field: "name",
       headerName: "Name",
       minWidth: 150,
+      renderCell: (params) => (
+        <Link to={`${routes.manageRoles()}/${params.row._id}`}>
+          {params?.row?.name}
+        </Link>
+      ),
     },
     {
       field: "label",
       headerName: "Label",
-      minWidth: 150,
-    },
-    {
-      field: "permissionsk",
-      headerName: "Permissions",
       minWidth: 150,
     },
     {
@@ -32,13 +39,14 @@ const Roles = () => {
       minWidth: 150,
       renderCell: (params) => (
         <Box>
-          <IconButton href={routes.editUser()} aria-label="edit">
+          <IconButton
+            aria-label="edit"
+            onClick={() => handleEdit(params.row._id)}
+          >
             <EditIcon color="info" />
           </IconButton>
-          <IconButton
-            // onClick={() => handleDelete(params.row.id)}
-            aria-label="delete"
-          >
+
+          <IconButton aria-label="delete">
             <DeleteIcon color="error" />
           </IconButton>
         </Box>
@@ -60,7 +68,9 @@ const Roles = () => {
       >
         <Typography variant="h6">All Roles</Typography>
         <Button
-          href={routes.createUser()}
+          onClick={() => {
+            navigate(`${routes.manageRoles()}/add`);
+          }}
           variant="contained"
           color="primary"
           startIcon={<AddIcon />}

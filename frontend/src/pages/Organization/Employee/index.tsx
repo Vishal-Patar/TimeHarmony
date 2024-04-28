@@ -14,10 +14,9 @@ const Employee = () => {
   const { data, isLoading } = useGetEmployees();
   const navigate = useNavigate();
 
-  const handleEdit = (id:string) => {
-    navigate(routes.employee()+'/'+id)
-  }
-  
+  const handleEdit = (id: string) => {
+    navigate(routes.employee() + "/" + id);
+  };
 
   const columns: GridColDef[] = [
     {
@@ -31,9 +30,9 @@ const Employee = () => {
       minWidth: 100,
       renderCell: (params) => (
         <Box>
-          <IconButton 
-          aria-label="edit"
-           onClick={() => handleEdit(params.row._id)}
+          <IconButton
+            aria-label="edit"
+            onClick={() => handleEdit(params.row._id)}
           >
             <EditIcon color="info" />
           </IconButton>
@@ -62,11 +61,7 @@ const Employee = () => {
         }}
       >
         <Typography variant="h6">All Employees</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-        >
+        <Button variant="contained" color="primary" startIcon={<AddIcon />}>
           Add New
         </Button>
       </Box>

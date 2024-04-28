@@ -13,6 +13,7 @@ import {
   LeaveRequests,
   Login,
   ManageRoles,
+  ManageRolesEdit,
   ManageUsers,
   Notifications,
   PasswordReset,
@@ -101,6 +102,18 @@ export const router = createBrowserRouter([
       {
         path: routes.manageRoles(),
         element: <ManageRoles />,
+      },
+      {
+        path: routes.manageRolesEdit(),
+        element: <ManageRolesEdit />,
+      },
+      {
+        path: routes.manageRolesView(),
+        element: <ManageRolesEdit />,
+      },
+      {
+        path: routes.manageRolesEdit(),
+        element: <ManageRolesEdit />,
       },
       {
         path: routes.manageUsers(),

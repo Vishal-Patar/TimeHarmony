@@ -1,12 +1,12 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useGetEmployeeById,
   useGetEmployees,
   useUpdateEmployee,
 } from "../../../api/employees/useEmployees";
 import { useNavigate, useParams } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Button from "../../../common/Button";
 import { useGetDesignations } from "../../../api/designations/useDesingations";
 import { useGetDepartments } from "../../../api/departments/useDepartments";
@@ -24,6 +24,7 @@ const Edit = () => {
     useGetDepartments();
   const { data: employeeList, isFetching: employeeFetching } =
     useGetEmployees();
+  const [loading, setLoading] = useState(true);
 
   const {
     register,
@@ -33,6 +34,7 @@ const Edit = () => {
   } = useForm();
 
   useEffect(() => {
+    setLoading(true);
     if (employee) {
       setValue("name", employee.name);
       setValue("address", employee.address);
@@ -40,6 +42,7 @@ const Edit = () => {
       setValue("department", employee.department);
       setValue("reportingManager", employee.reportingManager);
     }
+    setLoading(false);
   }, [employee, setValue]);
 
   const onSubmit = async (data: any) => {
@@ -51,6 +54,7 @@ const Edit = () => {
   };
 
   if (
+    loading ||
     isFetching ||
     desingationFetching ||
     departmentFetching ||

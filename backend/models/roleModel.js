@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 
 const permissionSchema = new Schema({
+  id: { type: Number, required: true },
   section: { type: String, required: true },
   readAccess: { type: Boolean, default: false },
   writeAccess: { type: Boolean, default: false },
