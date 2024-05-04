@@ -213,27 +213,36 @@ const Edit = () => {
         <Box
           sx={{
             display: "flex",
-            gap: 2,
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <Button variant="contained" onClick={() => navigate(-1)}>
-            {mode === "view" ? "Back" : "Cancel"}
-          </Button>
-
-          <Button
-            variant="contained"
-            color="success"
-            type="submit"
-            loading={isPending || isCreatePending}
-            disabled={mode === "view"}
+          <Typography variant="h6">Role {mode}</Typography>
+          <Box
             sx={{
-              display: mode === "view" ? "none" : "block",
+              display: "flex",
+              gap: 2,
+              justifyContent: "flex-end",
+              alignItems: "center",
             }}
           >
-            {mode === "edit" ? "Update" : "Save"}
-          </Button>
+            <Button variant="contained" onClick={() => navigate(-1)}>
+              {mode === "view" ? "Back" : "Cancel"}
+            </Button>
+
+            <Button
+              variant="contained"
+              color="success"
+              type="submit"
+              loading={isPending || isCreatePending}
+              disabled={mode === "view"}
+              sx={{
+                display: mode === "view" ? "none" : "block",
+              }}
+            >
+              {mode === "edit" ? "Update" : "Save"}
+            </Button>
+          </Box>
         </Box>
 
         <TextField

@@ -4,6 +4,7 @@ import {
   FormControlLabel,
   Switch,
   TextField,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
@@ -14,7 +15,7 @@ import {
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Button from "../../../common/Button";
-import { useGetDesignations } from "../../../api/designations/useDesingations";
+import { useGetDesignations } from "../../../api/designations/useDesignations";
 import { useGetDepartments } from "../../../api/departments/useDepartments";
 import routes from "../../../router/routes";
 import Loader from "../../../common/Loader";
@@ -99,41 +100,49 @@ const Edit = () => {
         <Box
           sx={{
             display: "flex",
-            gap: 2,
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <FormControlLabel
-            control={
-              <Switch
-                color="success"
-                defaultChecked={employee?.status}
-                inputProps={{ "aria-label": "controlled" }}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setValue("status", event.target?.checked);
-                }}
-                disabled={readOnly}
-              />
-            }
-            label="Status"
-          />
-          <Button variant="contained" onClick={() => navigate(-1)}>
-            {mode === "view" ? "Back" : "Cancel"}
-          </Button>
-
-          <Button
-            variant="contained"
-            color="success"
-            type="submit"
-            loading={isPending}
-            disabled={mode === "view"}
+          <Typography variant="h6">Employee {mode}</Typography>
+          <Box
             sx={{
-              display: mode === "view" ? "none" : "block",
+              display: "flex",
+              gap: 2,
+              alignItems: "center",
             }}
           >
-            {mode === "edit" ? "Update" : "Save"}
-          </Button>
+            <FormControlLabel
+              control={
+                <Switch
+                  color="success"
+                  defaultChecked={mode === "add" ? true : employee?.status}
+                  inputProps={{ "aria-label": "controlled" }}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setValue("status", event.target?.checked);
+                  }}
+                  disabled={readOnly}
+                />
+              }
+              label="Status"
+            />
+            <Button variant="contained" onClick={() => navigate(-1)}>
+              {mode === "view" ? "Back" : "Cancel"}
+            </Button>
+
+            <Button
+              variant="contained"
+              color="success"
+              type="submit"
+              loading={isPending}
+              disabled={mode === "view"}
+              sx={{
+                display: mode === "view" ? "none" : "block",
+              }}
+            >
+              {mode === "edit" ? "Update" : "Save"}
+            </Button>
+          </Box>
         </Box>
 
         <TextField

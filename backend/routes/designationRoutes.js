@@ -3,7 +3,7 @@ import { createDesignation, deleteDesignation, getDesignationById, getDesignatio
 const designationRoutes = Router();
 
 designationRoutes.get("/", getDesignations);
-designationRoutes.post("/create", createDesignation);
+designationRoutes.post("/", createDesignation);
 designationRoutes.delete("/:id", deleteDesignation);
 designationRoutes.patch("/:id", updateDesignation);
 designationRoutes.get("/:id", getDesignationById);

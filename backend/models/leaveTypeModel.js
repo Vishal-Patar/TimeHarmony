@@ -6,6 +6,10 @@ const leaveTypeSchema = Schema(
     label: { type: String, required: true },
     description: { type: String},
     allowedDays: { type: Number, required: true},
+    status: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

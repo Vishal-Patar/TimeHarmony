@@ -13,12 +13,13 @@ const getLeaveTypes = asyncHandler(async (req, res) => {
 
 const createLeaveType = asyncHandler(async (req, res) => {
   try {
-    const { name, label, description, allowedDays } = req.body;
+    const { name, label, description, allowedDays, status } = req.body;
     const leaveType = new LeaveType({
       name,
       label,
       description,
-      allowedDays
+      allowedDays,
+      status
     });
     await leaveType.save();
     res
@@ -30,64 +31,74 @@ const createLeaveType = asyncHandler(async (req, res) => {
   }
 });
 
-// const getDepartmentById = asyncHandler(async (req, res) => {
-//   try {
-//     const department = await Department.findById(req.params.id);
-//     if (!department) {
-//       return res.status(404).json({ message: "Department not found" });
-//     }
-//     res.status(200).json(department);
-//   } catch (error) {
-//     console.error("Error getting department:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
+const getLeaveTypeById = asyncHandler(async (req, res) => {
+  try {
+    const leaveType = await LeaveType.findById(req.params.id);
+    if (!leaveType) {
+      return res.status(404).json({ message: "LeaveType not found" });
+    }
+    res.status(200).json(leaveType);
+  } catch (error) {
+    console.error("Error getting leaveType:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
-// const deleteDepartment = asyncHandler(async (req, res) => {
-//   try {
-//     const deletedDepartment = await Department.findByIdAndDelete(req.params.id);
-//     if (!deletedDepartment) {
-//       return res.status(404).json({ message: "Department not found" });
-//     }
-//     res
-//       .status(200)
-//       .json({
-//         message: "Department deleted successfully",
-//         department: deletedDepartment,
-//       });
-//   } catch (error) {
-//     console.error("Error deleting department:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
+const deleteLeaveType = asyncHandler(async (req, res) => {
+  try {
+    const deletedLeaveType = await LeaveType.findByIdAndDelete(req.params.id);
+    if (!deletedLeaveType) {
+      return res.status(404).json({ message: "LeaveType not found" });
+    }
+    res
+      .status(200)
+      .json({
+        message: "LeaveType deleted successfully",
+        leaveType: deletedLeaveType,
+      });
+  } catch (error) {
+    console.error("Error deleting LeaveType:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
-// const updateDepartment = asyncHandler(async (req, res) => {
-//   try {
-//     const { name, label } = req.body;
+const updateLeaveType = asyncHandler(async (req, res) => {
+  try {
+    const { name, label, description, allowedDays, status } = req.body;
 
-//     const department = await Department.findById(req.params.id);
-//     if (!department) {
-//       return res.status(404).send("Department not found");
-//     }
+    const leaveType = await LeaveType.findById(req.params.id);
+    if (!leaveType) {
+      return res.status(404).send("LeaveType not found");
+    }
 
-//     // Update the department fields if they are provided in the request body
-//     if (name) {
-//       department.name = name;
-//     }
-//     if (label) {
-//       department.label = label;
-//     }
+    // Update the leaveType fields if they are provided in the request body
+    if (name) {
+      leaveType.name = name;
+    }
+    if (label) {
+      leaveType.label = label;
+    }
+    if (description) {
+      leaveType.description = description;
+    }
+    if (allowedDays) {
+      leaveType.allowedDays = allowedDays;
+    }
+    if (status !== undefined || status !== null) leaveType.status = status;
 
-//     // Save the updated department
-//     const updatedDepartment = await department.save();
-//     res.status(200).json(updatedDepartment);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Error updating department");
-//   }
-// });
+    // Save the updated leaveType
+    const updatedLeaveType = await leaveType.save();
+    res.status(200).json(updatedLeaveType);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating leaveType");
+  }
+});
 
 export {
     getLeaveTypes,
     createLeaveType,
+    getLeaveTypeById,
+    deleteLeaveType,
+    updateLeaveType
 };

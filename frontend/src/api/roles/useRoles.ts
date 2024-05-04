@@ -12,6 +12,8 @@ export const useGetRoles = () => {
   return useQuery({
     queryKey: ["useGetRoles"],
     queryFn: getRoles,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 };
 
@@ -24,7 +26,7 @@ export const useGetRoleById = (Id: string) => {
   return useQuery({
     queryKey: ["useGetRoleById", Id],
     queryFn: getRoleById,
-    enabled: !!Id,
+    enabled: !!Id
   });
 };
 

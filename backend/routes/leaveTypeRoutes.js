@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { createLeaveType, getLeaveTypes } from "../controllers/leaveTypeController.js";
+import { createLeaveType, getLeaveTypes, deleteLeaveType, getLeaveTypeById, updateLeaveType } from "../controllers/leaveTypeController.js";
 const leaveTypeRoutes = Router();
 
 leaveTypeRoutes.get("/", getLeaveTypes);
-leaveTypeRoutes.post("/create", createLeaveType);
-// leaveTypeRoutes.delete("/:id", deleteRole);
-// leaveTypeRoutes.patch("/:id", updateRole);
-// leaveTypeRoutes.get("/name/:name", getRoleByName);
+leaveTypeRoutes.post("/", createLeaveType);
+leaveTypeRoutes.delete("/:id", deleteLeaveType);
+leaveTypeRoutes.patch("/:id", updateLeaveType);
+leaveTypeRoutes.get("/:id", getLeaveTypeById);
 
 export default leaveTypeRoutes;

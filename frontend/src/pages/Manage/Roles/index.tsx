@@ -1,7 +1,6 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import Loader from "../../../common/Loader";
-import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import routes from "../../../router/routes";
@@ -65,8 +64,7 @@ const Roles = () => {
             loading={isPending}
             disabled={
               params.row?.name === "employee" ||
-              params.row?.name === "super-admin" ||
-              params.row?.name === "admin"
+              params.row?.name === "super-admin"
             }
           />
         </Box>
@@ -92,9 +90,8 @@ const Roles = () => {
 
         {hasWriteAccess && (
           <Button
-            onClick={() => {
-              navigate(`${routes.manageRoles()}/add`);
-            }}
+            component={Link}
+            to={routes.manageRolesAdd()}
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}

@@ -2,6 +2,11 @@ import { Navigate, createBrowserRouter } from "react-router-dom";
 import {
   Attendance,
   Dashboard,
+  Department,
+  DepartmentEdit,
+  Designation,
+  DesignationEdit,
+  EditLeave,
   EditUser,
   Employee,
   EmployeeEdit,
@@ -20,11 +25,9 @@ import {
   Register,
 } from "../pages";
 import routes from "./routes";
-import Department from "../pages/Organization/Department";
 import DefaultLayout from "../layout/DefaultLayout";
 import Landing from "../pages/Landing";
 
-import Designation from "../pages/Organization/Designation";
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +66,18 @@ export const router = createBrowserRouter([
         element: <LeaveManage />,
       },
       {
+        path: routes.editLeave(),
+        element: <EditLeave />,
+      },
+      {
+        path: routes.viewLeave(),
+        element: <EditLeave />,
+      },
+      {
+        path: routes.createLeave(),
+        element: <EditLeave />,
+      },
+      {
         path: routes.requestLeave(),
         element: <LeaveRequests />,
       },
@@ -87,8 +102,32 @@ export const router = createBrowserRouter([
         element: <Designation />,
       },
       {
+        path: routes.employeeDesignationsAdd(),
+        element: <DesignationEdit />,
+      },
+      {
+        path: routes.employeeDesignationsEdit(),
+        element: <DesignationEdit />,
+      },
+      {
+        path: routes.employeeDesignationsView(),
+        element: <DesignationEdit />,
+      },
+      {
         path: routes.employeeDepartment(),
         element: <Department />,
+      },
+      {
+        path: routes.employeeDepartmentEdit(),
+        element: <DepartmentEdit />,
+      },
+      {
+        path: routes.employeeDepartmentView(),
+        element: <DepartmentEdit />,
+      },
+      {
+        path: routes.employeeDepartmentAdd(),
+        element: <DepartmentEdit />,
       },
       {
         path: routes.profileSettings(),

@@ -4,6 +4,7 @@ import {
   FormControlLabel,
   Switch,
   TextField,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Loader from "../../../common/Loader";
@@ -13,7 +14,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ModeType } from "../../../types/common";
 import Button from "../../../common/Button";
 import { useGetRoles } from "../../../api/roles/useRoles";
-import { useGetUserById, useUpdateUser } from "../../../api/users/useUsers";
+import { useGetUserById, useRegisterUser, useUpdateUser } from "../../../api/users/useUsers";
 import useCheckAccess from "../../../helper/useCheckAccess";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
 
@@ -30,7 +31,8 @@ const Edit = () => {
   const { data: user, isFetching } = useGetUserById(id ?? "");
   const { mutateAsync, isPending } = useUpdateUser();
   const { data: Roles, isLoading } = useGetRoles();
-
+  const { mutateAsync: mutateCreateAsync, isPending: isCreatePending } =
+    useRegisterUser();
   const [loading, setLoading] = useState(true);
 
   const {
@@ -60,10 +62,17 @@ const Edit = () => {
   }, [user, setValue]);
 
   const onSubmit = async (data: any) => {
-    await mutateAsync({
-      id: user?._id,
-      data,
-    });
+    if (mode === "edit") {
+      await mutateAsync({
+        id: user?._id,
+        data,
+      });
+    } else {
+      await mutateCreateAsync({
+        ...data,
+        login: false
+      });
+    }
     navigate(routes.manageUsers());
   };
 
@@ -84,41 +93,49 @@ const Edit = () => {
         <Box
           sx={{
             display: "flex",
-            gap: 2,
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <FormControlLabel
-            control={
-              <Switch
-                color="success"
-                defaultChecked={user?.status}
-                inputProps={{ "aria-label": "controlled" }}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setValue("status", event.target?.checked);
-                }}
-                disabled={readOnly}
-              />
-            }
-            label="Status"
-          />
-          <Button variant="contained" onClick={() => navigate(-1)}>
-            {mode === "view" ? "Back" : "Cancel"}
-          </Button>
-
-          <Button
-            variant="contained"
-            color="success"
-            type="submit"
-            loading={isPending}
-            disabled={mode === "view"}
+          <Typography variant="h6">User {mode}</Typography>
+          <Box
             sx={{
-              display: mode === "view" ? "none" : "block",
+              display: "flex",
+              gap: 2,
+              alignItems: "center",
             }}
           >
-            {mode === "edit" ? "Update" : "Save"}
-          </Button>
+            <FormControlLabel
+              control={
+                <Switch
+                  color="success"
+                  defaultChecked={mode === "add" ? true : user?.status}
+                  inputProps={{ "aria-label": "controlled" }}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setValue("status", event.target?.checked);
+                  }}
+                  disabled={readOnly}
+                />
+              }
+              label="Status"
+            />
+            <Button variant="contained" onClick={() => navigate(-1)}>
+              {mode === "view" ? "Back" : "Cancel"}
+            </Button>
+
+            <Button
+              variant="contained"
+              color="success"
+              type="submit"
+              loading={isPending || isCreatePending}
+              disabled={mode === "view"}
+              sx={{
+                display: mode === "view" ? "none" : "block",
+              }}
+            >
+              {mode === "edit" ? "Update" : "Save"}
+            </Button>
+          </Box>
         </Box>
 
         <TextField
@@ -151,6 +168,7 @@ const Edit = () => {
             multiline
             {...register("password")}
             inputProps={{ readOnly }}
+            helperText={'Password should be minimum 8 character'}
           />
         )}
 

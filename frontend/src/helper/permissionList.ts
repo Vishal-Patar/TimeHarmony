@@ -9,8 +9,8 @@ export const rolePermissions: RolePermission[] = [
   {
     id: 1,
     section: "Dashboard",
-    readAccess: false,
-    writeAccess: false,
+    readAccess: true,
+    writeAccess: true,
   },
   {
     id: 2,
@@ -63,8 +63,8 @@ export const rolePermissions: RolePermission[] = [
   {
     id: 10,
     section: "Profile Setting",
-    readAccess: false,
-    writeAccess: false,
+    readAccess: true,
+    writeAccess: true,
   },
   {
     id: 11,

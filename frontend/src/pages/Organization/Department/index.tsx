@@ -1,12 +1,12 @@
 import React from "react";
-import { useGetDepartments } from "../../../api/departments/useDepartments";
+import { useDeleteDepartment, useGetDepartments } from "../../../api/departments/useDepartments";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import Loader from "../../../common/Loader";
 import AddIcon from "@mui/icons-material/Add";
 import useCheckAccess from "../../../helper/useCheckAccess";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import routes from "../../../router/routes";
 import DeleteButton from "../../../common/DeleteButton";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
@@ -15,17 +15,34 @@ const SECTION_ID = 9;
 
 const Department = () => {
   const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
-
   const { data, isLoading } = useGetDepartments();
+  const { mutateAsync, isPending } = useDeleteDepartment();
+
+  const navigate = useNavigate();
+
+  const handleEdit = (id: string) => {
+    navigate(`${routes.employeeDepartment()}/${id}/edit`);
+  };
+
+  const handleDelete = async (id: string) => {
+    await mutateAsync({
+      id,
+    });
+  };
   const columns: GridColDef[] = [
-    {
-      field: "label",
-      headerName: "Label",
-      flex: 1,
-    },
     {
       field: "name",
       headerName: "Name",
+      flex: 1,
+      renderCell: (params) => (
+        <Link to={`${routes.employeeDepartment()}/${params.row._id}`}>
+          {params?.row?.name}
+        </Link>
+      ),
+    },
+    {
+      field: "label",
+      headerName: "Label",
       flex: 1,
     },
     {
@@ -34,14 +51,16 @@ const Department = () => {
       flex: 1,
       renderCell: (params) => (
         <Box>
-          <IconButton aria-label="edit">
+          <IconButton
+            aria-label="edit"
+            onClick={() => handleEdit(params.row._id)}
+          >
             <EditIcon color="info" />
           </IconButton>
+
           <DeleteButton
-            onDelete={() => {
-              // handleDelete(params.row._id)
-            }}
-            // loading={isPending}
+            onDelete={() => handleDelete(params.row._id)}
+            loading={isPending}
           />
         </Box>
       ),
@@ -66,7 +85,7 @@ const Department = () => {
         {hasWriteAccess && (
           <Button
             component={Link}
-            to={`${routes.employeeDepartment()}/add`}
+            to={routes.employeeDepartmentAdd()}
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}

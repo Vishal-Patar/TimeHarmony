@@ -4,11 +4,11 @@ import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import Loader from "../../../common/Loader";
 import AddIcon from "@mui/icons-material/Add";
-import { useGetDesignations } from "../../../api/designations/useDesingations";
+import { useDeleteDesignation, useGetDesignations } from "../../../api/designations/useDesignations";
 import useCheckAccess from "../../../helper/useCheckAccess";
 import DeleteButton from "../../../common/DeleteButton";
 import routes from "../../../router/routes";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
 
 const SECTION_ID = 8;
@@ -16,31 +16,52 @@ const SECTION_ID = 8;
 const Designation = () => {
   const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
   const { data, isLoading } = useGetDesignations();
+  const { mutateAsync, isPending } = useDeleteDesignation();
+
+  const navigate = useNavigate();
+
+  const handleEdit = (id: string) => {
+    navigate(`${routes.manageRoles()}/${id}/edit`);
+  };
+
+  const handleDelete = async (id: string) => {
+    await mutateAsync({
+      id,
+    });
+  };
+
   const columns: GridColDef[] = [
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      renderCell: (params) => (
+        <Link to={`${routes.employeeDesignations()}/${params.row._id}`}>
+          {params?.row?.name}
+        </Link>
+      ),
+    },
     {
       field: "label",
       headerName: "Label",
       flex: 1,
     },
     {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-    },
-    {
       field: "action",
       headerName: "Action",
-      minWidth: 100,
+      flex: 1,
       renderCell: (params) => (
         <Box>
-          <IconButton aria-label="edit">
+          <IconButton
+            aria-label="edit"
+            onClick={() => handleEdit(params.row._id)}
+          >
             <EditIcon color="info" />
           </IconButton>
+
           <DeleteButton
-            onDelete={() => {
-              // handleDelete(params.row._id)
-            }}
-            // loading={isPending}
+            onDelete={() => handleDelete(params.row._id)}
+            loading={isPending}
           />
         </Box>
       ),
@@ -65,7 +86,7 @@ const Designation = () => {
         {hasWriteAccess && (
           <Button
             component={Link}
-            to={`${routes.employeeDepartment()}/add`}
+            to={routes.employeeDesignationsAdd()}
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}

@@ -10,7 +10,7 @@ import Employee from "../models/employeeModel.js";
 //@route POST /api/users/register
 //@access public
 const register = asyncHandler(async (req, res) => {
-  const { username, email, password, role, status } = req.body;
+  const { username, email, password, role, status, login = true } = req.body;
   if (!username || !email || !password) {
     res.status(400);
     throw new Error("All fields are mandatory!");
@@ -22,7 +22,12 @@ const register = asyncHandler(async (req, res) => {
   }
 
   // Fetch the ObjectId for the provided role name or set the default as employee
-  const roleObject = await Role.findOne({ name: role ?? "employee" });
+  const roleObject = await Role.findOne(
+   login ? { name: role ?? (email === process.env.SUPER_ADMIN ? "super-admin" : "employee") }
+   :{
+    _id: role
+   }
+  );
   if (!roleObject) {
     return res.status(400).json({ error: "Role not found" });
   }
@@ -45,18 +50,21 @@ const register = asyncHandler(async (req, res) => {
       const employee = new Employee({ user: user._id, name: user.username });
       await employee.save();
 
-      // After successul register login the user
-      const accessToken = sign(
-        {
-          user: {
-            username: user.username,
-            email: user.email,
-            id: user.id,
+      // After successful register login the user, if admin login true
+      let accessToken = '';
+      if (login) {
+        accessToken = sign(
+          {
+            user: {
+              username: user.username,
+              email: user.email,
+              id: user.id,
+            },
           },
-        },
-        process.env.ACCESS_TOKEN_SECERT,
-        { expiresIn: "15m" }
-      );
+          process.env.ACCESS_TOKEN_SECERT,
+          { expiresIn: "15m" }
+        );
+      }
 
       res.status(201).json({
         accessToken,
@@ -164,7 +172,13 @@ const updateUser = asyncHandler(async (req, res) => {
     if (username) updatedUser.username = username;
     if (email) updatedUser.email = email;
     if (role) updatedUser.role = role;
-    if (status !== undefined || status !== null) updatedUser.status = status;
+    if (status !== undefined || status !== null) {
+      // Cannot disable super admin
+      if (email === process.env.SUPER_ADMIN) {
+        return;
+      }
+      updatedUser.status = status;
+    }
 
     // Update password if provided
     if (password) {

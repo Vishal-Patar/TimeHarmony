@@ -14,7 +14,8 @@ const Footer = () => {
         justifyContent: "center",
         alignItems: "center",
         color: "white",
-        height: 30
+        height: 30,
+        backgroundColor: '#F1F1F1'
       }}
     >
       <Typography variant="body2" color={"primary.main"}>

@@ -74,7 +74,7 @@ export const useGetUserById = (Id: string) => {
   };
 
   return useQuery({
-    queryKey: ["useGetUserById"],
+    queryKey: ["useGetUserById", Id],
     queryFn: getUserById,
   });
 };

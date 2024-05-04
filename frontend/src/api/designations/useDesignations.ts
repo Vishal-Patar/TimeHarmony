@@ -1,42 +1,42 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ssoApiService } from '../services/ssoApiService'
-import { DEPARTMENT_PATH } from './path';
+import { DESIGNATION_PATH } from './path';
 import { enqueueSnackbar } from 'notistack';
 
-export const useGetDepartments = () => {
-  const getDepartments = async () => {
-    const { data } = await ssoApiService().get(DEPARTMENT_PATH.DEPARTMENT_LIST);
+export const useGetDesignations = () => {
+  const getDesignations = async () => {
+    const { data } = await ssoApiService().get(DESIGNATION_PATH.DESIGNATION_LIST);
     return data
   }
 
   return useQuery({
-    queryKey: ['useGetDepartments'],
-    queryFn: getDepartments
+    queryKey: ['useGetDesignations'],
+    queryFn: getDesignations
   })
 }
 
-export const useGetDepartmentById = (Id: string) => {
-  const getDepartmentById = async () => {
-    const { data } = await ssoApiService().get(`${DEPARTMENT_PATH.DEPARTMENT_LIST}/${Id}`);
+export const useGetDesignationById = (Id: string) => {
+  const getDesignationById = async () => {
+    const { data } = await ssoApiService().get(`${DESIGNATION_PATH.DESIGNATION_LIST}/${Id}`);
     return data;
   };
 
   return useQuery({
-    queryKey: ["useGetDepartmentById", Id],
-    queryFn: getDepartmentById,
+    queryKey: ["useGetDesignationById", Id],
+    queryFn: getDesignationById,
     enabled: !!Id
   });
 };
 
-export const useUpdateDepartment = () => {
+export const useUpdateDesignation = () => {
   const queryClient = useQueryClient();
   const updateDepartment = async (id: string, request: any) => {
     if (!id) {
-      throw new Error("Department ID is required.");
+      throw new Error("Designation ID is required.");
     }
 
     const { data } = await ssoApiService().patch(
-      `${DEPARTMENT_PATH.DEPARTMENT_LIST}/${id}`,
+      `${DESIGNATION_PATH.DESIGNATION_LIST}/${id}`,
       request
     );
 
@@ -45,7 +45,7 @@ export const useUpdateDepartment = () => {
   return useMutation({
     mutationFn: (request: any) => updateDepartment(request?.id, request?.data),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["useGetDepartments"] });
+      queryClient.invalidateQueries({ queryKey: ["useGetDesignations"] });
       enqueueSnackbar("Updated Successfully", {
         variant: "success",
       });
@@ -58,17 +58,17 @@ export const useUpdateDepartment = () => {
   });
 };
 
-export const useCreateDepartment = () => {
+export const useCreateDesignation = () => {
   const queryClient = useQueryClient();
-  const createDepartment = async (request: any) => {
-    const { data } = await ssoApiService().post(DEPARTMENT_PATH.DEPARTMENT_LIST, request);
+  const createDesignation = async (request: any) => {
+    const { data } = await ssoApiService().post(DESIGNATION_PATH.DESIGNATION_LIST, request);
 
     return data;
   };
   return useMutation({
-    mutationFn: createDepartment,
+    mutationFn: createDesignation,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["useCreateDepartment"] });
+      queryClient.invalidateQueries({ queryKey: ["useCreateDesignation"] });
       enqueueSnackbar("Created Successfully", {
         variant: "success",
       });
@@ -81,23 +81,23 @@ export const useCreateDepartment = () => {
   });
 };
 
-export const useDeleteDepartment = () => {
+export const useDeleteDesignation = () => {
   const queryClient = useQueryClient();
-  const deleteDepartment = async (id: string) => {
+  const deleteDesignation = async (id: string) => {
     if (!id) {
-      throw new Error("Department ID is required.");
+      throw new Error("Designation ID is required.");
     }
 
     const { data } = await ssoApiService().delete(
-      `${DEPARTMENT_PATH.DEPARTMENT_LIST}/${id}`
+      `${DESIGNATION_PATH.DESIGNATION_LIST}/${id}`
     );
 
     return data;
   };
   return useMutation({
-    mutationFn: (request: any) => deleteDepartment(request?.id),
+    mutationFn: (request: any) => deleteDesignation(request?.id),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["useGetDepartments"] });
+      queryClient.invalidateQueries({ queryKey: ["useGetDesignations"] });
       enqueueSnackbar("Deleted Successfully", {
         variant: "success",
       });

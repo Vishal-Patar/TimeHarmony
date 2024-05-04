@@ -3,7 +3,7 @@ import { applyLeave, approveLeave, getEmployeeLeaveRequests, getLeaveRequests, r
 const leaveRoutes = Router();
 
 leaveRoutes.post("/apply", applyLeave);
-leaveRoutes.get("/requests", getLeaveRequests);
+leaveRoutes.get("/requests/:id", getLeaveRequests);
 leaveRoutes.post("/approve/:leaveId", approveLeave);
 leaveRoutes.post("/reject/:leaveId", rejectLeave);
 leaveRoutes.get("/employee/:employeeId", getEmployeeLeaveRequests);

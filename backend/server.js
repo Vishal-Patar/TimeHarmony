@@ -24,7 +24,7 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/departments', departmentRoutes);
-app.use('/api/desingations', designationRoutes);
+app.use('/api/designations', designationRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/leave', leaveRoutes);
 app.use('/api/leave/types', leaveTypeRoutes);

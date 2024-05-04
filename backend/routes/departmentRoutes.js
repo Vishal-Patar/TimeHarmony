@@ -3,7 +3,7 @@ import { createDepartment, deleteDepartment, getDepartmentById, getDepartments, 
 const departmentRoutes = Router();
 
 departmentRoutes.get("/", getDepartments);
-departmentRoutes.post("/create", createDepartment);
+departmentRoutes.post("/", createDepartment);
 departmentRoutes.delete("/:id", deleteDepartment);
 departmentRoutes.patch("/:id", updateDepartment);
 departmentRoutes.get("/:id", getDepartmentById);

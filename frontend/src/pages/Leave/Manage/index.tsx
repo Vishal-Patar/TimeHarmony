@@ -1,55 +1,106 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import Loader from "../../../common/Loader";
-import Button from "../../../common/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import routes from "../../../router/routes";
-import { useGetLeaveTypes } from "../../../api/leaves/useLeaves";
+import { useDeleteLeaveType, useGetLeaveTypes } from "../../../api/leaves/useLeaves";
+import useCheckAccess from "../../../helper/useCheckAccess";
+import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+import { Link, useNavigate } from "react-router-dom";
+import DeleteButton from "../../../common/DeleteButton";
 
+const SECTION_ID = 6;
 const Manage = () => {
+  const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
+  const navigate = useNavigate();
   const { data, isLoading } = useGetLeaveTypes();
+  const { mutateAsync, isPending } = useDeleteLeaveType()
+
+  const handleEdit = (id: string) => {
+    navigate(`${routes.manageLeave()}/${id}/edit`);
+  };
+
+  const handleDelete = async (id: string) => {
+    await mutateAsync({
+      id,
+    });
+  };
+
   const columns: GridColDef[] = [
     {
       field: "name",
       headerName: "Name",
-      minWidth: 150,
+      flex: 1,
+      renderCell: (params) => (
+        <Link to={`${routes.manageLeave()}/${params.row?._id}`}>
+          {params.row?.name}
+        </Link>
+      ),
     },
     {
       field: "label",
       headerName: "Label",
-      minWidth: 150,
+      flex: 1,
     },
     {
       field: "description",
       headerName: "Description",
-      minWidth: 400,
+      flex: 1,
     },
     {
       field: "allowedDays",
       headerName: "Allowed Days",
-      minWidth: 150,
+      flex: 1,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            color: params.row.status ? "green" : "red",
+          }}
+        >
+          <Box
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: "50%",
+              backgroundColor: params.row.status ? "green" : "red",
+              marginRight: 5,
+            }}
+          />
+          {params.row.status ? "Active" : "Inactive"}
+        </Box>
+      ),
     },
     {
       field: "action",
       headerName: "Action",
-      minWidth: 150,
+      flex: 1,
       renderCell: (params) => (
         <Box>
-          <IconButton href={routes.editUser()} aria-label="edit">
+          <IconButton
+            aria-label="edit"
+            onClick={() => handleEdit(params.row._id)}
+          >
             <EditIcon color="info" />
           </IconButton>
-          <IconButton
-            // onClick={() => handleDelete(params.row.id)}
-            aria-label="delete"
-          >
-            <DeleteIcon color="error" />
-          </IconButton>
+
+          <DeleteButton
+            onDelete={() => handleDelete(params.row._id)}
+            loading={isPending}
+          />
         </Box>
       ),
     },
   ];
+
+  if (!hasReadAccess) return <UnauthorizedAccessCard />;
 
   if (isLoading) return <Loader />;
 
@@ -64,14 +115,17 @@ const Manage = () => {
         }}
       >
         <Typography variant="h6">All Leave Types</Typography>
-        <Button
-          href={routes.createUser()}
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-        >
-          Add New
-        </Button>
+        {hasWriteAccess && (
+          <Button
+            component={Link}
+            to={`${routes.createLeave()}`}
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+          >
+            Add New
+          </Button>
+        )}
       </Box>
 
       <DataGrid
@@ -87,7 +141,6 @@ const Manage = () => {
           },
         }}
         pageSizeOptions={[10]}
-        // checkboxSelection
         disableRowSelectionOnClick
         slots={{
           toolbar: GridToolbar,
@@ -97,9 +150,10 @@ const Manage = () => {
             showQuickFilter: true,
           },
         }}
-        style={{
-          minHeight: 300,
+        columnVisibilityModel={{
+          action: hasWriteAccess,
         }}
+        autoHeight
       />
     </Box>
   );

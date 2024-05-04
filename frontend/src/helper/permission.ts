@@ -2,7 +2,7 @@ export const checkReadAccess = (sectionId: number) => {
   const user = JSON.parse(localStorage?.getItem("user") ?? "");
   const userPermissions = user?.role?.permissions;
 
-  const permission = userPermissions.find(
+  const permission = userPermissions?.find(
     (perm: { id: number }) => perm.id === sectionId
   );
   return permission ? permission.readAccess : false;
@@ -12,7 +12,7 @@ export const checkWriteAccess = (sectionId: number) => {
   const user = JSON.parse(localStorage?.getItem("user") ?? "");
   const userPermissions = user?.role?.permissions;
 
-  const permission = userPermissions.find(
+  const permission = userPermissions?.find(
     (perm: { id: number }) => perm.id === sectionId
   );
 

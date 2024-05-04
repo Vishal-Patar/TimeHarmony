@@ -4,7 +4,7 @@ import Leave from "../models/leaveModel.js";
 import LeaveType from "../models/leaveTypeModel.js";
 
 const applyLeave = asyncHandler(async (req, res) => {
-  const { employeeId, startDate, endDate, reason } = req.body;
+  const { employeeId, startDate, endDate, reason, leaveType } = req.body;
   try {
     const employee = await Employee.findById(employeeId);
     if (!employee) {
@@ -21,6 +21,7 @@ const applyLeave = asyncHandler(async (req, res) => {
       startDate,
       endDate,
       reason,
+      leaveType,
       reportingManagerId: reportingManager._id,
     });
 
@@ -33,10 +34,12 @@ const applyLeave = asyncHandler(async (req, res) => {
 });
 
 const getLeaveRequests = asyncHandler(async (req, res) => {
-  const { reportingManagerId } = req.query;
   try {
-    const leaveRequests = await Leave.find({ reportingManagerId, status: 'pending' });
-    res.json({ leaveRequests });
+    const leaveRequests = await Leave.find({ reportingManagerId: req.params.id })
+      .populate("employeeId")
+      .populate("leaveType")
+
+    res.json(leaveRequests);
   } catch (error) {
     console.error('Error fetching leave requests:', error);
     res.status(500).json({ error: 'Error fetching leave requests' });
@@ -82,11 +85,16 @@ const rejectLeave = asyncHandler(async (req, res) => {
 const getEmployeeLeaveRequests = asyncHandler(async (req, res) => {
   const { employeeId } = req.params;
   try {
+    // Check if the employee has a reporting manager
+    const employee = await Employee.findById(employeeId);
+    if (!employee.reportingManager) {
+      return res.json([]);
+    }
     // Fetch all leave requests for the employee
     const leaveRequests = await Leave.find({ employeeId }).populate('leaveType');
 
-    // Fetch leave types to get allowed days for each leave type
-    const leaveTypes = await LeaveType.find();
+    // Fetch leave types to get allowed days for each leave type with status true
+    const leaveTypes = await LeaveType.find({ status: true });
 
     // Calculate used leave for each leave type
     const leaveData = leaveTypes.map((leaveType) => {

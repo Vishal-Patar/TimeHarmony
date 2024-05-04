@@ -12,6 +12,7 @@ import Button from "../../common/Button";
 import routes from "../../router/routes";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../common/Loader";
+import { ContactSupportOutlined } from "@mui/icons-material";
 
 interface LeaveType {
   name: string;
@@ -28,6 +29,15 @@ const Leave = () => {
   const navigate = useNavigate();
 
   if (isLoading) return <Loader />;
+  if (!isLoading && !data?.length) {
+    return (
+      <Box sx={{
+        flex: 1
+      }}>
+        <NoLeaveMessage />
+      </Box>
+    )
+  }
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -53,9 +63,8 @@ const Leave = () => {
             usedDays,
             availableDays,
           }: any) => (
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} key={name + _id}>
               <Card
-                key={name + _id}
                 sx={{
                   textAlign: "center",
                 }}
@@ -96,3 +105,26 @@ const Leave = () => {
 };
 
 export default Leave;
+
+
+const NoLeaveMessage = () => {
+  return (
+    <Box
+      sx={{
+        textAlign: 'center',
+        backgroundColor: '#f7f7f7',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      }}
+    >
+      <ContactSupportOutlined sx={{ fontSize: 64, color: '#3f51b5' }} />
+      <Box sx={{ mt: 2, fontSize: 24, fontWeight: 'bold', color: '#333' }}>
+        No Leave Available!
+      </Box>
+      <Box sx={{ mt: 1, fontSize: 16, color: '#666' }}>
+        Please contact your administrator.
+      </Box>
+    </Box>
+  );
+};
