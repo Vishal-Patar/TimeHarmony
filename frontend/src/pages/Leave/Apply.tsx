@@ -51,7 +51,6 @@ const Apply = () => {
   const startDate = watch("startDate");
   const selectedLeaveType = watch("leaveType");
 
-  console.log("the..", selectedLeaveType);
   // useEffect(() => {
   //   if (id && location?.pathname?.includes("edit")) {
   //     setMode("edit");

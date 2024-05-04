@@ -1,14 +1,14 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridDeleteIcon, GridToolbar } from "@mui/x-data-grid";
 import Loader from "../../../common/Loader";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import routes from "../../../router/routes";
 import { useDeleteRole, useGetRoles } from "../../../api/roles/useRoles";
 import { Link, useNavigate } from "react-router-dom";
-import DeleteButton from "../../../common/DeleteButton";
 import useCheckAccess from "../../../helper/useCheckAccess";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+import ConfirmationButton from "../../../common/ConfirmationButton";
 
 const SECTION_ID = 14;
 
@@ -59,14 +59,16 @@ const Roles = () => {
             <EditIcon color="info" />
           </IconButton>
 
-          <DeleteButton
-            onDelete={() => handleDelete(params.row._id)}
+          <ConfirmationButton
+            onConfirm={() => handleDelete(params.row._id)}
             loading={isPending}
             disabled={
               params.row?.name === "employee" ||
               params.row?.name === "super-admin"
             }
-          />
+          >
+            <GridDeleteIcon color="error" />
+          </ConfirmationButton>
         </Box>
       ),
     },

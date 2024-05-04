@@ -1,6 +1,6 @@
 import { ContactSupportOutlined } from '@mui/icons-material';
-import { Box, IconButton } from '@mui/material';
-import { useGetLeaveRequests } from '../../api/leaves/useLeaves';
+import { Box, IconButton, Typography } from '@mui/material';
+import { useApproveLeave, useGetLeaveRequests, useRejectLeave } from '../../api/leaves/useLeaves';
 import Loader from '../../common/Loader';
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import useCheckAccess from '../../helper/useCheckAccess';
@@ -9,27 +9,25 @@ import { Link } from 'react-router-dom';
 import routes from '../../router/routes';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import dayjs from 'dayjs';
+import { status } from './helper';
+import ConfirmationButton from '../../common/ConfirmationButton';
 
 const SECTION_ID = 5;
 const Requests = () => {
   const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
   const employee = JSON.parse(localStorage?.getItem("employee") ?? "");
   const { data, isLoading } = useGetLeaveRequests(employee?._id);
+  const { mutateAsync, isPending } = useApproveLeave()
+  const { mutateAsync: mutateAsyncReject, isPending: isRejectPending } = useRejectLeave()
 
-  const status: any = {
-    pending: {
-      color: 'orange',
-      label: 'Pending'
-    },
-    approved: {
-      color: 'green',
-      label: 'Approved'
-    },
-    rejected: {
-      color: 'red',
-      label: 'Rejected'
-    }
-  }
+  const handleReject = async (id: string) => {
+    await mutateAsyncReject(id);
+  };
+
+  const handleApprove = async (id: string) => {
+    await mutateAsync(id);
+  };
 
   const columns: GridColDef[] = [
     {
@@ -37,8 +35,8 @@ const Requests = () => {
       headerName: "Name",
       flex: 1,
       renderCell: (params) => (
-        <Link to={`${routes.employee()}/${params.row?._id}`}>
-          {params.row.employeeId.name}
+        <Link to={`${routes.employee()}/${params.row?.employeeId?._id}`}>
+          {params.row.employeeId?.name}
         </Link>
       ),
     },
@@ -52,57 +50,55 @@ const Requests = () => {
       field: "startDate",
       headerName: "From",
       flex: 1,
+      valueGetter: (params) => dayjs(params.row.startDate)?.format('DD-MM-YYYY'),
     },
     {
       field: "endDate",
       headerName: "To",
       flex: 1,
+      valueGetter: (params) => dayjs(params.row.endDate)?.format('DD-MM-YYYY'),
     },
     {
       field: "status",
-      headerName: "Status",
-      flex: 1,
-      renderCell: (params) => (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            color: status[params.row.status]?.color
-          }}
-        >
-          <Box
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: "50%",
-              backgroundColor: status[params.row.status]?.color,
-              marginRight: 5,
-            }}
-          />
-          {status[params.row.status]?.label}
-        </Box>
-      ),
-    },
-    {
-      field: "action",
       headerName: "Action",
       flex: 1,
       renderCell: (params) => (
-        <Box>
-          <IconButton
-            aria-label="edit"
-          // onClick={() => handleEdit(params.row._id)}
+        params.row.status === 'pending' ? (<Box>
+          <ConfirmationButton
+            onConfirm={() => handleReject(params.row._id)}
+            loading={isPending}
+            disabled={isPending}
           >
             <CloseOutlinedIcon color="error" />
-          </IconButton>
+          </ConfirmationButton>
 
-          <IconButton
-            aria-label="edit"
-          // onClick={() => handleEdit(params.row._id)}
+          <ConfirmationButton
+            onConfirm={() => handleApprove(params.row._id)}
+            loading={isRejectPending}
+            disabled={isRejectPending}
           >
             <DoneOutlinedIcon color="success" />
-          </IconButton>
-        </Box>
+          </ConfirmationButton>
+        </Box>) : (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              color: status[params.row.status]?.color
+            }}
+          >
+            <Box
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                backgroundColor: status[params.row.status]?.color,
+                marginRight: 5,
+              }}
+            />
+            {status[params.row.status]?.label}
+          </Box>
+        )
       ),
     },
   ];
@@ -122,6 +118,16 @@ const Requests = () => {
 
   return (
     <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 2,
+        }}
+      >
+        <Typography variant="h6">All Requests</Typography>
+      </Box>
       <DataGrid
         getRowId={(row) => row?._id ?? 0}
         loading={isLoading}

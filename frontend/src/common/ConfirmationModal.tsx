@@ -7,25 +7,27 @@ import {
 } from "@mui/material";
 import Button from "./Button";
 
-interface DeleteConfirmationModalProps {
-  onDelete: () => void;
+interface ConfirmationModalProps {
+  onConfirm: () => void;
   open: boolean;
   handleClose: () => void;
   loading?: boolean;
+  id?: string;
 }
 
-const DeleteConfirmationModal = ({
-  onDelete,
+const ConfirmationModal = ({
+  onConfirm,
   open,
   handleClose,
   loading,
-}: DeleteConfirmationModalProps) => {
+  id
+}: ConfirmationModalProps) => {
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Confirm Delete</DialogTitle>
+    <Dialog open={open} onClose={handleClose} id={id}>
+      <DialogTitle>Confirm</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Are you sure you want to delete this item? This action cannot be
+          Are you sure you? This action cannot be
           undone.
         </DialogContentText>
       </DialogContent>
@@ -34,16 +36,16 @@ const DeleteConfirmationModal = ({
           Cancel
         </Button>
         <Button
-          onClick={onDelete}
+          onClick={onConfirm}
           color="error"
           variant="contained"
           loading={loading}
         >
-          Delete
+          Confirm
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default DeleteConfirmationModal;
+export default ConfirmationModal;

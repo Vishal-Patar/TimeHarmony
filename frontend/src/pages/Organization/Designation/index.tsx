@@ -1,15 +1,15 @@
 import React from "react";
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridDeleteIcon, GridToolbar } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import Loader from "../../../common/Loader";
 import AddIcon from "@mui/icons-material/Add";
 import { useDeleteDesignation, useGetDesignations } from "../../../api/designations/useDesignations";
 import useCheckAccess from "../../../helper/useCheckAccess";
-import DeleteButton from "../../../common/DeleteButton";
 import routes from "../../../router/routes";
 import { Link, useNavigate } from "react-router-dom";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+import ConfirmationButton from "../../../common/ConfirmationButton";
 
 const SECTION_ID = 8;
 
@@ -59,10 +59,12 @@ const Designation = () => {
             <EditIcon color="info" />
           </IconButton>
 
-          <DeleteButton
-            onDelete={() => handleDelete(params.row._id)}
+          <ConfirmationButton
+            onConfirm={() => handleDelete(params.row._id)}
             loading={isPending}
-          />
+          >
+            <GridDeleteIcon color="error" />
+          </ConfirmationButton>
         </Box>
       ),
     },

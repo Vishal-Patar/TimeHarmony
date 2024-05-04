@@ -8,7 +8,8 @@ import { useDeleteLeaveType, useGetLeaveTypes } from "../../../api/leaves/useLea
 import useCheckAccess from "../../../helper/useCheckAccess";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
 import { Link, useNavigate } from "react-router-dom";
-import DeleteButton from "../../../common/DeleteButton";
+import ConfirmationButton from "../../../common/ConfirmationButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const SECTION_ID = 6;
 const Manage = () => {
@@ -91,10 +92,12 @@ const Manage = () => {
             <EditIcon color="info" />
           </IconButton>
 
-          <DeleteButton
-            onDelete={() => handleDelete(params.row._id)}
+          <ConfirmationButton
+            onConfirm={() => handleDelete(params.row._id)}
             loading={isPending}
-          />
+          >
+            <DeleteIcon color="error" />
+          </ConfirmationButton>
         </Box>
       ),
     },

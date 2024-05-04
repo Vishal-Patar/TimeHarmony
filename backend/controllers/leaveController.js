@@ -38,6 +38,22 @@ const getLeaveRequests = asyncHandler(async (req, res) => {
     const leaveRequests = await Leave.find({ reportingManagerId: req.params.id })
       .populate("employeeId")
       .populate("leaveType")
+      .sort({ createdAt: -1 });
+
+    res.json(leaveRequests);
+  } catch (error) {
+    console.error('Error fetching leave requests:', error);
+    res.status(500).json({ error: 'Error fetching leave requests' });
+  }
+});
+
+const getAppliedLeaveRequests = asyncHandler(async (req, res) => {
+  try {
+    const leaveRequests = await Leave.find({ employeeId: req.params.id })
+      .populate("employeeId")
+      .populate("leaveType")
+      .populate("reportingManagerId")
+      .sort({ createdAt: -1 });
 
     res.json(leaveRequests);
   } catch (error) {
@@ -128,4 +144,5 @@ export {
   approveLeave,
   rejectLeave,
   getEmployeeLeaveRequests,
+  getAppliedLeaveRequests
 };

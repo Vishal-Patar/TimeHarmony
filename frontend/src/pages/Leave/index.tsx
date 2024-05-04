@@ -13,6 +13,7 @@ import routes from "../../router/routes";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../common/Loader";
 import { ContactSupportOutlined } from "@mui/icons-material";
+import RequestList from "./RequestList";
 
 interface LeaveType {
   name: string;
@@ -100,6 +101,8 @@ const Leave = () => {
           )
         )}
       </Grid>
+
+      <RequestList />
     </Box>
   );
 };

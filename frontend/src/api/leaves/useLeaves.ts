@@ -156,8 +156,79 @@ export const useGetLeaveRequests = (Id: string) => {
   };
 
   return useQuery({
-    queryKey: ["useGetLeaveRequests", Id],
+    queryKey: ["useGetLeaveRequests"],
     queryFn: getLeaveRequests,
     enabled: !!Id
+  });
+};
+
+export const useGetAppliedRequests = (Id: string) => {
+  const getAppliedRequests = async () => {
+    const { data } = await ssoApiService().get(`${LEAVE_PATH.LEAVE_APPLIED}/${Id}`);
+    return data;
+  };
+
+  return useQuery({
+    queryKey: ["useGetAppliedRequests"],
+    queryFn: getAppliedRequests,
+    enabled: !!Id
+  });
+};
+
+export const useRejectLeave = () => {
+  const queryClient = useQueryClient();
+  const rejectLeave = async (id: string) => {
+    if (!id) {
+      throw new Error("Leave ID is required.");
+    }
+
+    const { data } = await ssoApiService().post(
+      `${LEAVE_PATH.LEAVE_REJECT}/${id}`
+    );
+
+    return data;
+  };
+  return useMutation({
+    mutationFn: rejectLeave,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["useGetLeaveRequests"] });
+      enqueueSnackbar("Updated Successfully", {
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error?.message ?? "Error", {
+        variant: "error",
+      });
+    },
+  });
+};
+
+export const useApproveLeave = () => {
+  const queryClient = useQueryClient();
+  const approveLeave = async (id: string) => {
+    if (!id) {
+      throw new Error("Leave ID is required.");
+    }
+
+    const { data } = await ssoApiService().post(
+      `${LEAVE_PATH.LEAVE_APPROVE}/${id}`
+    );
+
+    return data;
+  };
+  return useMutation({
+    mutationFn: approveLeave,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["useGetLeaveRequests"] });
+      enqueueSnackbar("Updated Successfully", {
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error?.message ?? "Error", {
+        variant: "error",
+      });
+    },
   });
 };
