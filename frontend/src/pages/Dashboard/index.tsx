@@ -5,6 +5,8 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { makeStyles } from "@mui/styles";
+import { useNavigate } from "react-router-dom";
+import routes from "../../router/routes";
 
 const useStyles = makeStyles({
   card: {
@@ -27,6 +29,7 @@ const useStyles = makeStyles({
 const Dashboard = () => {
   const emp = JSON.parse(localStorage?.getItem("employee") ?? "");
   const classes = useStyles();
+  const navigate = useNavigate();
 
   return (
     <Fade in={true} timeout={1000}>
@@ -43,7 +46,7 @@ const Dashboard = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card className={classes.card}>
+              <Card className={classes.card} onClick={()=> navigate(routes.attendance())}>
                 <CardContent>
                   <AccessTimeIcon className={classes.icon} />
                   <Typography variant="h6">Track Attendance</Typography>
@@ -54,7 +57,7 @@ const Dashboard = () => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card className={classes.card}>
+              <Card className={classes.card} onClick={()=> navigate(routes.leave())}>
                 <CardContent>
                   <EventAvailableIcon className={classes.icon} />
                   <Typography variant="h6">Manage Leaves</Typography>
@@ -65,7 +68,7 @@ const Dashboard = () => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card className={classes.card}>
+              <Card className={classes.card} onClick={()=> navigate(routes.employee())}>
                 <CardContent>
                   <BarChartIcon className={classes.icon} />
                   <Typography variant="h6">Manage Organization</Typography>
@@ -76,7 +79,7 @@ const Dashboard = () => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Card className={classes.card}>
+              <Card className={classes.card} onClick={()=> navigate(routes.profileSettings())}>
                 <CardContent>
                   <SettingsIcon className={classes.icon} />
                   <Typography variant="h6">Customize Settings</Typography>

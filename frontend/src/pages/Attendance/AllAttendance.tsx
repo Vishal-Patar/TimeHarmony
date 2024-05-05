@@ -35,7 +35,7 @@ const AllAttendance = () => {
           sx={{
             color: theme?.palette?.success?.main
           }}>
-          {dayjs(params?.row?.checkIn)?.format('DD-MM-YYYY HH:MM')}
+          {dayjs(params?.row?.checkIn)?.format('DD-MM-YYYY HH:mm:ss')}
         </Typography>
       ),
     },
@@ -49,7 +49,7 @@ const AllAttendance = () => {
           sx={{
             color: theme?.palette?.warning?.main
           }}>
-          {params?.row?.checkOut ? dayjs(params?.row?.checkOut)?.format('DD-MM-YYYY HH:MM') : '...'}
+          {params?.row?.checkOut ? dayjs(params?.row?.checkOut)?.format('DD-MM-YYYY HH:mm:ss') : '...'}
         </Typography>
       ),
     },

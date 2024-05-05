@@ -55,6 +55,10 @@ const Roles = () => {
           <IconButton
             aria-label="edit"
             onClick={() => handleEdit(params.row._id)}
+            disabled={
+              params.row?.name === "employee" ||
+              params.row?.name === "super-admin"
+            }
           >
             <EditIcon color="info" />
           </IconButton>

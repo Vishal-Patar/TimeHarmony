@@ -61,7 +61,7 @@ const Attendance = () => {
                   {
                     isCheckoutPending ? <CircularProgress /> : <LogoutIcon sx={{ fontSize: 150 }} />
                   }
-                  <p>{dayjs(attendance?.checkIn)?.format('DD-MM-YYYY HH:MM')}</p>
+                  <p>{dayjs(attendance?.checkIn)?.format('DD-MM-YYYY HH:mm:ss')}</p>
                   <p>Check Out</p>
                 </Box>
               ) : (
