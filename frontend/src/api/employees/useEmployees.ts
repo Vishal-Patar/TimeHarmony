@@ -72,3 +72,17 @@ export const useUpdateEmployee = () => {
     },
   });
 };
+
+export const useGetReportingEmployees = (Id: string) => {
+  const getReportingEmployees = async () => {
+    const { data } = await ssoApiService().get(
+      EMPLOYEE_PATH.EMPLOYEE_REPORTING + "/" + Id
+    );
+    return data;
+  };
+
+  return useQuery({
+    queryKey: ["useGetReportingEmployees"],
+    queryFn: getReportingEmployees,
+  });
+};

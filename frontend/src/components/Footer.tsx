@@ -15,7 +15,8 @@ const Footer = () => {
         alignItems: "center",
         color: "white",
         height: 30,
-        backgroundColor: '#F1F1F1'
+        backgroundColor: '#F1F1F1',
+        gap: 1,
       }}
     >
       <Typography variant="body2" color={"primary.main"}>
@@ -24,10 +25,10 @@ const Footer = () => {
       </Typography>
       <Box
         sx={{
-          ml: 1,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          gap: 1
         }}
       >
         <Link
@@ -42,15 +43,6 @@ const Footer = () => {
         >
           <LinkedInIcon />
         </Link>
-      </Box>
-      <Box
-        sx={{
-          ml: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
         <Link
           href="https://github.com/Vishal-Patar"
           target="_blank"
@@ -64,6 +56,7 @@ const Footer = () => {
           <GitHubIcon />
         </Link>
       </Box>
+
     </Box>
   );
 };

@@ -68,7 +68,7 @@ const Dashboard = () => {
               <Card className={classes.card}>
                 <CardContent>
                   <BarChartIcon className={classes.icon} />
-                  <Typography variant="h6">Generate Reports</Typography>
+                  <Typography variant="h6">Manage Organization</Typography>
                   <Typography variant="body2">
                     Analyze data and generate insightful reports.
                   </Typography>

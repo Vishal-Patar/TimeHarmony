@@ -92,12 +92,14 @@ const Users = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: 2,
+          flexDirection: ['column-reverse', 'row'],
+          gap: 1,
+          justifyContent: 'space-between',
+          marginBottom: 1
         }}
       >
-        <Typography variant="h6">All Users</Typography>
+        <Typography variant="h6" alignSelf={'flex-start'}>All Users</Typography>
         {hasWriteAccess && (
           <Button
             component={Link}
@@ -105,6 +107,9 @@ const Users = () => {
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
+            sx={{
+              alignSelf: 'flex-end'
+            }}
           >
             Add New
           </Button>

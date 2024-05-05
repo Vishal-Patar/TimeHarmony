@@ -79,12 +79,14 @@ const Designation = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: 2,
+          flexDirection: ['column-reverse', 'row'],
+          gap: 1,
+          justifyContent: 'space-between',
+          marginBottom: 1
         }}
       >
-        <Typography variant="h6">All Designations</Typography>
+        <Typography variant="h6" alignSelf={'flex-start'}>All Designations</Typography>
         {hasWriteAccess && (
           <Button
             component={Link}
@@ -92,6 +94,9 @@ const Designation = () => {
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
+            sx={{
+              alignSelf: 'flex-end'
+            }}
           >
             Add New
           </Button>

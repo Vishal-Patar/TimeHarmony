@@ -1,38 +1,29 @@
 import {
   Autocomplete,
   Box,
-  FormControlLabel,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useCheckAccess from "../../helper/useCheckAccess";
-import { ModeType } from "../../types/common";
-import { useGetUserById, useUpdateUser } from "../../api/users/useUsers";
-import { useGetRoles } from "../../api/roles/useRoles";
 import routes from "../../router/routes";
 import UnauthorizedAccessCard from "../../common/UnauthorizedAccessCard";
 import Loader from "../../common/Loader";
 import Button from "../../common/Button";
-import { useApplyLeave, useGetLeaveTypes, useGetMyLeave } from "../../api/leaves/useLeaves";
+import { useApplyLeave, useGetMyLeave } from "../../api/leaves/useLeaves";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import NoLeaveMessage from "../../components/Leave/NoLeaveMassage";
 
 const SECTION_ID = 4;
 
 const Apply = () => {
   const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
   const employee = JSON.parse(localStorage?.getItem("employee") ?? "");
-  const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
   const readOnly = false;
-
-  const { data: user, isFetching } = useGetUserById(id ?? "");
-  const { mutateAsync, isPending } = useUpdateUser();
   const { data: leavesType, isLoading } = useGetMyLeave(employee?._id);
 
   const { mutateAsync: mutateCreateAsync, isPending: isCreatePending } =
@@ -83,9 +74,20 @@ const Apply = () => {
     return <UnauthorizedAccessCard />;
   }
 
-  if (loading || isFetching || isLoading) {
+  if (loading || isLoading) {
     return <Loader />;
   }
+
+  if (!isLoading && !leavesType?.length) {
+    return (
+      <Box sx={{
+        flex: 1
+      }}>
+        <NoLeaveMessage />
+      </Box>
+    )
+  }
+
 
   return (
     <Box>
@@ -106,7 +108,7 @@ const Apply = () => {
             variant="contained"
             color="success"
             type="submit"
-            loading={isPending}
+            loading={isCreatePending}
           >
             Apply
           </Button>

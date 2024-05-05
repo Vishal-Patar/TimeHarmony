@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Box,
+  Chip,
   FormControlLabel,
   Switch,
   TextField,
@@ -22,6 +23,7 @@ import Loader from "../../../common/Loader";
 import { ModeType } from "../../../types/common";
 import useCheckAccess from "../../../helper/useCheckAccess";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+import NoDataFound from "../../../common/NoDataFound";
 
 const SECTION_ID = 7;
 
@@ -33,9 +35,9 @@ const Edit = () => {
   const location = useLocation();
   const readOnly = mode === "view";
 
-  const { data: employee, isFetching } = useGetEmployeeById(id ?? "");
+  const { data: employee, isFetching, isError } = useGetEmployeeById(id ?? "");
   const { mutateAsync, isPending } = useUpdateEmployee();
-  const { data: designationList, isFetching: desingationFetching } =
+  const { data: designationList, isFetching: designationFetching } =
     useGetDesignations();
   const { data: departmentList, isFetching: departmentFetching } =
     useGetDepartments();
@@ -87,11 +89,15 @@ const Edit = () => {
   if (
     loading ||
     isFetching ||
-    desingationFetching ||
+    designationFetching ||
     departmentFetching ||
     employeeFetching
   ) {
     return <Loader />;
+  }
+
+  if (!isFetching && isError) {
+    return <NoDataFound />;
   }
 
   return (
@@ -100,16 +106,29 @@ const Edit = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
+            flexDirection: ['column-reverse', 'row'],
+            gap: 1,
+            justifyContent: 'space-between',
+            marginBottom: 1
           }}
         >
-          <Typography variant="h6">Employee {mode}</Typography>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: ['column', 'row'],
+            gap: 1,
+            alignSelf: 'flex-start'
+          }}>
+            <Typography variant="h6">Employee {mode}</Typography>
+            <Chip label={employee?.user?.email} variant="outlined" color="info" />
+          </Box>
+
           <Box
             sx={{
               display: "flex",
               gap: 2,
               alignItems: "center",
+              alignSelf: 'flex-end'
             }}
           >
             <FormControlLabel
@@ -144,7 +163,6 @@ const Edit = () => {
             </Button>
           </Box>
         </Box>
-
         <TextField
           label="Name"
           margin="normal"

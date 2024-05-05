@@ -143,6 +143,25 @@ const updateEmployee = asyncHandler(async (req, res) => {
   }
 });
 
+const getReportingEmployees = asyncHandler(async (req, res) => {
+  try {
+    const reportingManagerId = req.params.id;
+    const employee = await Employee.find({ reportingManager: reportingManagerId })
+      .populate("designation")
+      .populate("reportingManager")
+      .populate("department")
+      .populate({
+        path: "user",
+        populate: { path: "role" },
+      });
+
+    res.status(200).json(employee);
+  } catch (error) {
+    console.error("Error getting employee:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 export {
   getEmployees,
   createEmployee,
@@ -150,4 +169,5 @@ export {
   deleteEmployee,
   updateEmployee,
   getEmployeeByUserId,
+  getReportingEmployees
 };

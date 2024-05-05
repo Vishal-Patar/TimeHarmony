@@ -17,6 +17,7 @@ import { useGetRoles } from "../../../api/roles/useRoles";
 import { useGetUserById, useRegisterUser, useUpdateUser } from "../../../api/users/useUsers";
 import useCheckAccess from "../../../helper/useCheckAccess";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+import NoDataFound from "../../../common/NoDataFound";
 
 const SECTION_ID = 13;
 
@@ -28,7 +29,7 @@ const Edit = () => {
   const location = useLocation();
   const readOnly = mode === "view";
 
-  const { data: user, isFetching } = useGetUserById(id ?? "");
+  const { data: user, isFetching, isError } = useGetUserById(id ?? "");
   const { mutateAsync, isPending } = useUpdateUser();
   const { data: Roles, isLoading } = useGetRoles();
   const { mutateAsync: mutateCreateAsync, isPending: isCreatePending } =
@@ -87,22 +88,30 @@ const Edit = () => {
     return <Loader />;
   }
 
+  if (!isFetching && isError) {
+    return <NoDataFound />;
+  }
+
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
+            flexDirection: ['column-reverse', 'row'],
+            gap: 1,
+            justifyContent: 'space-between',
+            marginBottom: 1
           }}
         >
-          <Typography variant="h6">User {mode}</Typography>
+          <Typography variant="h6" alignSelf={'flex-start'}>User {mode}</Typography>
           <Box
             sx={{
               display: "flex",
               gap: 2,
               alignItems: "center",
+              alignSelf: 'flex-end'
             }}
           >
             <FormControlLabel

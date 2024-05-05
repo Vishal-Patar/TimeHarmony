@@ -1,25 +1,17 @@
-import React from "react";
-import { Box, IconButton, Typography } from "@mui/material";
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import EditIcon from "@mui/icons-material/Edit";
-import Loader from "../../../common/Loader";
-import { useGetEmployees } from "../../../api/employees/useEmployees";
-import { Link, useNavigate } from "react-router-dom";
-import routes from "../../../router/routes";
-import useCheckAccess from "../../../helper/useCheckAccess";
-import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
+import { Box, Typography } from '@mui/material';
+import Loader from '../../common/Loader';
+import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import useCheckAccess from '../../helper/useCheckAccess';
+import UnauthorizedAccessCard from '../../common/UnauthorizedAccessCard';
+import { Link } from 'react-router-dom';
+import routes from '../../router/routes';
+import { useGetReportingEmployees } from '../../api/employees/useEmployees';
 
-const SECTION_ID = 7;
-
-const Employee = () => {
+const SECTION_ID = 5;
+const ReportingEmployeeList = () => {
   const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
-
-  const { data, isLoading } = useGetEmployees();
-  const navigate = useNavigate();
-
-  const handleEdit = (id: string) => {
-    navigate(`${routes.employee()}/${id}/edit`);
-  };
+  const employee = JSON.parse(localStorage?.getItem("employee") ?? "");
+  const { data, isLoading } = useGetReportingEmployees(employee?._id);
 
   const columns: GridColDef[] = [
     {
@@ -51,19 +43,6 @@ const Employee = () => {
       valueGetter: (params) => params.row.designation?.label || "N/A",
     },
     {
-      field: "reportingManager",
-      headerName: "Reporting Manager",
-      flex: 1,
-      renderCell: (params) =>
-        params.row.reportingManager?.name ? (
-          <Link to={`${routes.employee()}/${params.row.reportingManager?._id}`}>
-            {params.row.reportingManager?.name}
-          </Link>
-        ) : (
-          "N/A"
-        ),
-    },
-    {
       field: "status",
       headerName: "Status",
       flex: 1,
@@ -88,22 +67,8 @@ const Employee = () => {
         </Box>
       ),
     },
-    {
-      field: "action",
-      headerName: "Action",
-      flex: 1,
-      renderCell: (params) => (
-        <Box>
-          <IconButton
-            aria-label="edit"
-            onClick={() => handleEdit(params.row._id)}
-          >
-            <EditIcon color="info" />
-          </IconButton>
-        </Box>
-      ),
-    },
   ];
+
 
   if (!hasReadAccess) return <UnauthorizedAccessCard />;
 
@@ -119,9 +84,8 @@ const Employee = () => {
           marginBottom: 2,
         }}
       >
-        <Typography variant="h6">All Employees</Typography>
+        <Typography variant="h6">Employees Reporting To You</Typography>
       </Box>
-
       <DataGrid
         getRowId={(row) => row?._id ?? 0}
         loading={isLoading}
@@ -150,7 +114,9 @@ const Employee = () => {
         autoHeight
       />
     </Box>
-  );
-};
+  )
+}
 
-export default Employee;
+export default ReportingEmployeeList
+
+

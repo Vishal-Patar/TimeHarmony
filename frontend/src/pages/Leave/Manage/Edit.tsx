@@ -9,6 +9,7 @@ import { ModeType } from "../../../types/common";
 import useCheckAccess from "../../../helper/useCheckAccess";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
 import { useCreateLeaveType, useGetLeaveTypeById, useUpdateLeaveType } from "../../../api/leaves/useLeaves";
+import NoDataFound from "../../../common/NoDataFound";
 
 const SECTION_ID = 6;
 
@@ -18,7 +19,7 @@ const Edit = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mode, setMode] = useState<ModeType>("add");
-  const { data: editData, isFetching } = useGetLeaveTypeById(
+  const { data: editData, isFetching, isError } = useGetLeaveTypeById(
     mode === "add" || !id ? "" : id
   );
   const { mutateAsync, isPending } = useUpdateLeaveType();
@@ -79,22 +80,30 @@ const Edit = () => {
     return <Loader />;
   }
 
+  if (!isFetching && isError) {
+    return <NoDataFound />;
+  }
+
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
+            flexDirection: ['column-reverse', 'row'],
+            gap: 1,
+            justifyContent: 'space-between',
+            marginBottom: 1
           }}
         >
-          <Typography variant="h6">Leave {mode}</Typography>
+          <Typography variant="h6" alignSelf={'flex-start'}>Leave {mode}</Typography>
           <Box
             sx={{
               display: "flex",
               gap: 2,
               alignItems: "center",
+              alignSelf: 'flex-end',
             }}
           >
             <FormControlLabel

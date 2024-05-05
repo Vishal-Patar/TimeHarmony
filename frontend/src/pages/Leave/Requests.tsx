@@ -1,5 +1,5 @@
 import { ContactSupportOutlined } from '@mui/icons-material';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useApproveLeave, useGetLeaveRequests, useRejectLeave } from '../../api/leaves/useLeaves';
 import Loader from '../../common/Loader';
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';

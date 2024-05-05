@@ -12,6 +12,9 @@ import { useTheme } from "../theme";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import routes from "../router/routes";
+import { GridMenuIcon } from "@mui/x-data-grid";
+import { openDrawer } from "../features/drawer/drawerSlice";
+import { useDispatch } from "react-redux";
 
 const AppHeader = () => {
   const theme = useTheme();
@@ -19,6 +22,7 @@ const AppHeader = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<any>(null);
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -46,6 +50,18 @@ const AppHeader = () => {
       }}
     >
       <Toolbar>
+        <IconButton
+          size="large"
+          color="primary"
+          onClick={() => {
+            dispatch(openDrawer())
+          }}
+          sx={{
+            display: ['block', 'none']
+          }}
+        >
+          <GridMenuIcon />
+        </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Time Harmony
         </Typography>
