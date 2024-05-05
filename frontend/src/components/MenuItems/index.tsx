@@ -44,6 +44,7 @@ export const MenuItems = () => {
       label: "Attendance",
       sectionId: 2,
       targetLink: routes.attendance(),
+      activeBasePath: routes.attendance(),
       icon: (
         <EventOutlinedIcon
           style={{
@@ -51,6 +52,36 @@ export const MenuItems = () => {
           }}
         />
       ),
+      submenu: [
+        {
+          name: "view",
+          label: "View",
+          sectionId: 4,
+          targetLink: routes.attendance(),
+          icon: (
+            <EventOutlinedIcon
+              style={{
+                color: theme.customColor.sidebar.subIcon,
+                fontSize: "20px",
+              }}
+            />
+          ),
+        },
+        {
+          name: "manage",
+          label: "Manage",
+          sectionId: 6,
+          targetLink: routes.attendanceManage(),
+          icon: (
+            <WorkOutlineOutlinedIcon
+              style={{
+                color: theme.customColor.sidebar.subIcon,
+                fontSize: "20px",
+              }}
+            />
+          ),
+        },
+      ],
     },
     {
       name: "leave",
@@ -257,5 +288,4 @@ export const MenuItems = () => {
   const filteredList = filterList(list);
 
   return filteredList;
-  // return list;
 };

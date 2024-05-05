@@ -47,9 +47,9 @@ const getAttendance = asyncHandler(async (req, res) => {
         const { employeeId } = req.params;
 
         // Find all attendance records for the employee
-        const attendanceRecords = await Attendance.find({ employee: employeeId });
+        const attendanceRecords = await Attendance.find({ employee: employeeId }).sort({ createdAt: -1 });;
 
-        res.status(200).json({ attendanceRecords });
+        res.status(200).json(attendanceRecords);
     } catch (error) {
         console.error('Error fetching attendance for employee:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -58,8 +58,8 @@ const getAttendance = asyncHandler(async (req, res) => {
 
 const getAllAttendance = asyncHandler(async (req, res) => {
     try {
-        const attendanceRecords = await Attendance.find();
-        res.status(200).json({ attendanceRecords });
+        const attendanceRecords = await Attendance.find().populate('employee').sort({ createdAt: -1 });;
+        res.status(200).json(attendanceRecords);
     } catch (error) {
         console.error('Error fetching attendance for employee:', error);
         res.status(500).json({ error: 'Internal server error' });

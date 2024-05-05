@@ -3,6 +3,7 @@ export { default as Login } from './Login';
 export { default as PasswordReset } from './PasswordReset';
 export { default as Dashboard } from './Dashboard';
 export { default as Attendance } from './Attendance';
+export { default as AttendanceManage } from './Attendance/AllAttendance';
 export { default as Employee } from './Organization/Employee';
 export { default as EmployeeEdit } from './Organization/Employee/Edit';
 export { default as HelpSupport } from './HelpSupport';

@@ -3,11 +3,16 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useCheckIn, useCheckOut, useIsCheckin } from '../../api/attendance/useAttendance';
 import theme from '../../theme';
+import dayjs from 'dayjs';
+import useCheckAccess from '../../helper/useCheckAccess';
+import UnauthorizedAccessCard from '../../common/UnauthorizedAccessCard';
+import MyAttendance from './MyAttendance';
 
+const SECTION_ID = 2;
 const Attendance = () => {
   const employee = JSON.parse(localStorage?.getItem("employee") ?? "");
-
-  const { data: { isCheckIn , attendance} = {}, isFetching } = useIsCheckin(employee?._id);
+  const { hasReadAccess } = useCheckAccess(SECTION_ID);
+  const { data: { isCheckIn, attendance } = {}, isFetching } = useIsCheckin(employee?._id);
   const { mutateAsync: mutateCheckIn, isPending: isCheckinPending } = useCheckIn();
   const { mutateAsync: mutateCheckOut, isPending: isCheckoutPending } = useCheckOut();
 
@@ -24,10 +29,13 @@ const Attendance = () => {
     }
   }
 
+  if (!hasReadAccess) return <UnauthorizedAccessCard />;
+
   return (
     <Box sx={{
       display: 'flex',
-      justifyContent: 'center'
+      gap: 3,
+      flexDirection: 'column'
     }}>
       {
         isFetching ? 'Loading...' : (
@@ -41,7 +49,9 @@ const Attendance = () => {
               alignItems: 'center',
               color: theme.palette.background.paper,
               textAlign: 'center',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              padding: 2,
+              alignSelf:'center'
             }}
             onClick={() => handleClick()}
           >
@@ -51,7 +61,7 @@ const Attendance = () => {
                   {
                     isCheckoutPending ? <CircularProgress /> : <LogoutIcon sx={{ fontSize: 150 }} />
                   }
-                  <p>{attendance?.checkIn}</p>
+                  <p>{dayjs(attendance?.checkIn)?.format('DD-MM-YYYY HH:MM')}</p>
                   <p>Check Out</p>
                 </Box>
               ) : (
@@ -66,7 +76,9 @@ const Attendance = () => {
           </Card>
         )
       }
+      <MyAttendance />
     </Box>
+
   )
 }
 

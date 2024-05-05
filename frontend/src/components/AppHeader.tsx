@@ -15,6 +15,7 @@ import routes from "../router/routes";
 import { GridMenuIcon } from "@mui/x-data-grid";
 import { openDrawer } from "../features/drawer/drawerSlice";
 import { useDispatch } from "react-redux";
+import { handleLogout } from "../helper/handleLogout";
 
 const AppHeader = () => {
   const theme = useTheme();
@@ -30,14 +31,9 @@ const AppHeader = () => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
     // Logout the user
-    localStorage.removeItem("accessToken");
-    sessionStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
-    sessionStorage.removeItem("user");
-    localStorage.removeItem("employee");
-    sessionStorage.removeItem("employee");
+    handleLogout()
     navigate(routes.login());
     handleClose();
   };
@@ -92,7 +88,7 @@ const AppHeader = () => {
             >
               Profile
             </MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
           </Menu>
         </Box>
       </Toolbar>

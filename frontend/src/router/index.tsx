@@ -1,6 +1,7 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import {
   Attendance,
+  AttendanceManage,
   Dashboard,
   Department,
   DepartmentEdit,
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
       {
         path: routes.attendance(),
         element: <Attendance />,
+      },
+      {
+        path: routes.attendanceManage(),
+        element: <AttendanceManage />,
       },
       {
         path: routes.leave(),

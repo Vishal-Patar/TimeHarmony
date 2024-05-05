@@ -5,6 +5,7 @@ const routes = {
   passwordReset: () => "password-reset",
   dashboard: () => "/dashboard",
   attendance: () => "/attendance",
+  attendanceManage: () => "/attendance/manage",
   employee: () => "/employee",
   employeeView: () => "/employee/:id",
   employeeEdit: () => "/employee/:id/edit",
