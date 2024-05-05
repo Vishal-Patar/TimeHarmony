@@ -11,7 +11,8 @@ const DefaultLayout = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const accessToken = localStorage?.getItem("accessToken");
-  const user = JSON.parse(localStorage?.getItem("user") ?? "");
+  const userDetails = localStorage?.getItem("user")
+  const user = accessToken && JSON.parse(userDetails ?? "");
   const { data, isFetching } = useGetUserById(user?._id);
 
   useEffect(() => {
