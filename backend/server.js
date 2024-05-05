@@ -10,6 +10,7 @@ import designationRoutes from './routes/designationRoutes.js';
 import employeeRoutes from './routes/employeeRoutes.js';
 import leaveRoutes from './routes/leaveRoutes.js';
 import leaveTypeRoutes from './routes/leaveTypeRoutes.js';
+import attendanceRoutes from './routes/attendanceRoutes.js';
 
 connectDb();
 const app = express();
@@ -28,6 +29,7 @@ app.use('/api/designations', designationRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/leave', leaveRoutes);
 app.use('/api/leave/types', leaveTypeRoutes);
+app.use('/api/attendance', attendanceRoutes);
 
 app.use(errorHandler);
 app.listen(port, () => {
