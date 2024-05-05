@@ -7,19 +7,22 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useGetLeaveTypes, useGetMyLeave } from "../../api/leaves/useLeaves";
+import { useGetMyLeave } from "../../api/leaves/useLeaves";
 import Button from "../../common/Button";
 import routes from "../../router/routes";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../common/Loader";
 import { ContactSupportOutlined } from "@mui/icons-material";
 import RequestList from "./RequestList";
+import theme from "../../theme";
 
 interface LeaveType {
   name: string;
   label: string;
   description: string;
   allowedDays: number;
+  usedDays: number;
+  remainingDays: number
   _id: string;
 }
 
@@ -53,7 +56,12 @@ const Leave = () => {
         Apply Leave
       </Button>
 
-      <Grid container spacing={4}>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-evenly',
+        gap: 3,
+        flexWrap:'wrap'
+      }}>
         {data?.map(
           ({
             name,
@@ -62,33 +70,43 @@ const Leave = () => {
             allowedDays,
             _id,
             usedDays,
-            availableDays,
-          }: any) => (
-            <Grid item xs={12} sm={6} md={4} key={name + _id}>
+            remainingDays,
+          }: LeaveType) => (
+            <Box key={name + _id} sx={{maxWidth: 300}}>
               <Card
                 sx={{
                   textAlign: "center",
+                  height: '100%',
                 }}
               >
                 <CardContent>
                   <Grid container spacing={4}>
                     <Grid item xs={12}>
-                      <Typography variant="h4">{label}</Typography>
+                      <Typography variant="h5">{label}</Typography>
                     </Grid>
                     <Grid item xs={12}>
                       <CircularProgress
                         variant="determinate"
-                        value={(availableDays / allowedDays) * 100}
+                        value={(remainingDays / allowedDays) * 100}
                         size={100}
+                        color="success"
+                        thickness={22}
+                        sx={{
+                          backgroundColor: theme.palette.primary.main,
+                          borderRadius: '50%'
+                        }}
                       />
                     </Grid>
 
                     <Grid item xs={12}>
                       <Typography variant="subtitle1">
-                        Available: {allowedDays}
+                        Allowed: {allowedDays}
                       </Typography>
                       <Typography variant="subtitle1">
                         Used: {usedDays}
+                      </Typography>
+                      <Typography variant="subtitle1">
+                        Available: {remainingDays}
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
@@ -97,11 +115,10 @@ const Leave = () => {
                   </Grid>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
           )
         )}
-      </Grid>
-
+      </Box>
       <RequestList />
     </Box>
   );

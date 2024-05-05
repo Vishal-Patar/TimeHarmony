@@ -60,7 +60,7 @@ const Requests = () => {
     },
     {
       field: "status",
-      headerName: "Action",
+      headerName: "Action / Status",
       flex: 1,
       renderCell: (params) => (
         params.row.status === 'pending' ? (<Box>

@@ -138,11 +138,30 @@ const getEmployeeLeaveRequests = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteLeave = asyncHandler(async (req, res) => {
+  try {
+    const deletedLeave = await Leave.findByIdAndDelete(req.params.id);
+    if (!deletedLeave) {
+      return res.status(404).json({ message: "Leave not found" });
+    }
+    res
+      .status(200)
+      .json({
+        message: "Leave deleted successfully",
+        leave: deletedLeave,
+      });
+  } catch (error) {
+    console.error("Error deleting leave:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 export {
   applyLeave,
   getLeaveRequests,
   approveLeave,
   rejectLeave,
   getEmployeeLeaveRequests,
-  getAppliedLeaveRequests
+  getAppliedLeaveRequests,
+  deleteLeave
 };

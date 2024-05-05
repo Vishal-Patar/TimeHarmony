@@ -4,19 +4,26 @@ import Loader from '../../common/Loader';
 import { Link } from 'react-router-dom';
 import routes from '../../router/routes';
 import useCheckAccess from '../../helper/useCheckAccess';
-import { useGetAppliedRequests } from '../../api/leaves/useLeaves';
+import { useDeleteLeave, useGetAppliedRequests } from '../../api/leaves/useLeaves';
 import dayjs from 'dayjs';
-import { Box, IconButton, Typography } from '@mui/material';
-import EditIcon from "@mui/icons-material/Edit";
+import { Box, Typography } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
 import UnauthorizedAccessCard from '../../common/UnauthorizedAccessCard';
 import { status } from './helper';
+import ConfirmationButton from '../../common/ConfirmationButton';
 
 const SECTION_ID = 4;
 const RequestList = () => {
     const { hasReadAccess, hasWriteAccess } = useCheckAccess(SECTION_ID);
     const employee = JSON.parse(localStorage?.getItem("employee") ?? "");
     const { data, isLoading } = useGetAppliedRequests(employee?._id);
+    const { mutateAsync, isPending } = useDeleteLeave();
+
+    const handleDelete = async (id: string) => {
+        await mutateAsync({
+            id,
+        });
+    };
 
     const columns: GridColDef[] = [
         {
@@ -74,23 +81,18 @@ const RequestList = () => {
         },
         {
             field: "action",
-            headerName: "Action",
+            headerName: "Action / Responded Date",
             flex: 1,
             renderCell: (params) => (
                 <Box>
-                    <IconButton
-                        aria-label="edit"
-                    // onClick={() => handleEdit(params.row._id)}
-                    >
-                        <EditIcon color="info" />
-                    </IconButton>
-
-                    <IconButton
-                        aria-label="edit"
-                    // onClick={() => handleEdit(params.row._id)}
-                    >
-                        <DeleteIcon color="error" />
-                    </IconButton>
+                    {params.row.status === 'pending' ? (
+                        <ConfirmationButton
+                            onConfirm={() => handleDelete(params.row._id)}
+                            loading={isPending}
+                        >
+                            <DeleteIcon color="error" />
+                        </ConfirmationButton>
+                    ) : dayjs(params.row.updatedAt)?.format('DD-MM-YYYY')}
                 </Box>
             ),
         },

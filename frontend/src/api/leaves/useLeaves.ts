@@ -232,3 +232,33 @@ export const useApproveLeave = () => {
     },
   });
 };
+
+export const useDeleteLeave = () => {
+  const queryClient = useQueryClient();
+  const deleteItem = async (id: string) => {
+    if (!id) {
+      throw new Error("ID is required.");
+    }
+
+    const { data } = await ssoApiService().delete(
+      `${LEAVE_PATH.LEAVE_LIST}/${id}`
+    );
+
+    return data;
+  };
+  return useMutation({
+    mutationFn: (request: any) => deleteItem(request?.id),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["useGetAppliedRequests"] });
+      queryClient.invalidateQueries({ queryKey: ["useGetMyLeave"] });
+      enqueueSnackbar("Deleted Successfully", {
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      enqueueSnackbar(error?.message ?? "Error", {
+        variant: "error",
+      });
+    },
+  });
+};
