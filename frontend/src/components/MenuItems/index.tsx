@@ -4,7 +4,6 @@ import DashboardCustomizeOutlinedIcon from "@mui/icons-material/DashboardCustomi
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import EventBusyOutlinedIcon from "@mui/icons-material/EventBusyOutlined";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
-import NotificationsActiveOutlinedIcon from "@mui/icons-material/NotificationsActiveOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
@@ -176,19 +175,6 @@ export const MenuItems = () => {
       targetLink: routes.profileSettings(),
       icon: (
         <ManageAccountsOutlinedIcon
-          style={{
-            color: theme.customColor.sidebar.icon,
-          }}
-        />
-      ),
-    },
-    {
-      name: "notifications",
-      label: "Notifications",
-      sectionId: 11,
-      targetLink: routes.notifications(),
-      icon: (
-        <NotificationsActiveOutlinedIcon
           style={{
             color: theme.customColor.sidebar.icon,
           }}

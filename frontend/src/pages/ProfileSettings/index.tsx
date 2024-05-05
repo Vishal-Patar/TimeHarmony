@@ -42,20 +42,20 @@ const ProfileSettings = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="body1">
-              <strong>Designation:</strong> {designation?.label}
+              <strong>Designation:</strong> {designation?.label ?? 'N/A'}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="body1">
-              <strong>Department:</strong> {department?.label}
+              <strong>Department:</strong> {department?.label ?? 'N/A'}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="body1">
               <strong>Reporting Manager:</strong>{" "}
-              <Link to={`${routes.employee()}/${reportingManager?._id}`}>
+              {reportingManager?.name ? <Link to={`${routes.employee()}/${reportingManager?._id}`}>
                 {reportingManager?.name}
-              </Link>
+              </Link> : 'N/A'}
             </Typography>
           </Grid>
         </Grid>

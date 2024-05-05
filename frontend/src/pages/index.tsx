@@ -13,7 +13,6 @@ export { default as EditLeave } from './Leave/Manage/Edit';
 export { default as LeaveApply} from './Leave/Apply';
 export { default as Notifications } from './Notifications';
 export { default as ProfileSettings } from './ProfileSettings';
-export { default as ReportsAnalytics } from './ReportsAnalytics/ReportsAnalytics';
 export { default as ManageRoles } from './Manage/Roles';
 export { default as ManageRolesEdit } from './Manage/Roles/Edit';
 export { default as ManageUsers } from './Manage/Users';
