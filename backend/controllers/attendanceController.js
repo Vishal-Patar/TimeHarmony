@@ -41,7 +41,7 @@ const checkOut = asyncHandler(async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
+// vishal patar
 const getAttendance = asyncHandler(async (req, res) => {
     try {
         const { employeeId } = req.params;

@@ -22,11 +22,6 @@ var corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Test API endpoint
-app.use("/", (req, res) => {
-  res.status(200).json({ message: "Hello, this is a test API endpoint!" });
-});
-
 app.use("/api/users", userRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/departments", departmentRoutes);
