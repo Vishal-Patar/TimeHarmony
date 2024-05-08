@@ -1,11 +1,11 @@
-import { Box, Typography } from '@mui/material'
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid'
-import dayjs from 'dayjs';
-import React from 'react'
-import useCheckAccess from '../../helper/useCheckAccess';
-import UnauthorizedAccessCard from '../../common/UnauthorizedAccessCard';
-import { useGetAttendance } from '../../api/attendance/useAttendance';
-import theme from '../../theme';
+import { Box, Typography } from "@mui/material";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import dayjs from "dayjs";
+import React from "react";
+import useCheckAccess from "../../helper/useCheckAccess";
+import UnauthorizedAccessCard from "../../common/UnauthorizedAccessCard";
+import { useGetAttendance } from "../../api/attendance/useAttendance";
+import theme from "../../theme";
 
 const SECTION_ID = 2;
 const MyAttendance = () => {
@@ -20,11 +20,12 @@ const MyAttendance = () => {
       flex: 1,
       renderCell: (params) => (
         <Typography
-          variant='body1'
+          variant="body1"
           sx={{
-            color: theme?.palette?.success?.main
-          }}>
-          {dayjs(params?.row?.checkIn)?.format('DD-MM-YYYY HH:mm:ss')}
+            color: theme?.palette?.success?.main,
+          }}
+        >
+          {dayjs(params?.row?.checkIn)?.format("DD-MM-YYYY HH:mm:ss")}
         </Typography>
       ),
     },
@@ -34,13 +35,29 @@ const MyAttendance = () => {
       flex: 1,
       renderCell: (params) => (
         <Typography
-          variant='body1'
+          variant="body1"
           sx={{
-            color: theme?.palette?.warning?.main
-          }}>
-          {params?.row?.checkOut ? dayjs(params?.row?.checkOut)?.format('DD-MM-YYYY HH:mm:ss') : '...'}
+            color: theme?.palette?.warning?.main,
+          }}
+        >
+          {params?.row?.checkOut
+            ? dayjs(params?.row?.checkOut)?.format("DD-MM-YYYY HH:mm:ss")
+            : "..."}
         </Typography>
       ),
+    },
+    {
+      field: "totalTime",
+      headerName: "Total Time",
+      flex: 1,
+      valueGetter: (params) => {
+        const checkInTime = dayjs(params?.row?.checkIn);
+        const checkOutTime = dayjs(params?.row?.checkOut);
+        const totalTime = checkOutTime.diff(checkInTime, "second"); // Get difference in seconds
+        const minutes = Math.floor(totalTime / 60);
+        const seconds = totalTime % 60;
+        return totalTime ? `${minutes}m ${seconds}s` : "...";
+      },
     },
   ];
 
@@ -83,7 +100,7 @@ const MyAttendance = () => {
         autoHeight
       />
     </Box>
-  )
-}
+  );
+};
 
-export default MyAttendance
+export default MyAttendance;
