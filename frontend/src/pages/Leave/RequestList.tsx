@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { Box, Typography } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
 import UnauthorizedAccessCard from '../../common/UnauthorizedAccessCard';
-import { status } from './helper';
+import { calculateDaysDiff, status } from './helper';
 import ConfirmationButton from '../../common/ConfirmationButton';
 
 const SECTION_ID = 4;
@@ -43,6 +43,12 @@ const RequestList = () => {
             headerName: "To",
             flex: 1,
             valueGetter: (params) => dayjs(params.row.endDate)?.format('DD-MM-YYYY'),
+        },
+        {
+            field: "days",
+            headerName: "Days",
+            flex: 1,
+            valueGetter: (params) => calculateDaysDiff(params.row.startDate, params.row.endDate),
         },
         {
             field: "reportingManagerId",

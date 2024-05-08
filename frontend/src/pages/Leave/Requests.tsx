@@ -10,7 +10,7 @@ import routes from '../../router/routes';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import dayjs from 'dayjs';
-import { status } from './helper';
+import { calculateDaysDiff, status } from './helper';
 import ConfirmationButton from '../../common/ConfirmationButton';
 
 const SECTION_ID = 5;
@@ -58,6 +58,12 @@ const Requests = () => {
       flex: 1,
       valueGetter: (params) => dayjs(params.row.endDate)?.format('DD-MM-YYYY'),
     },
+    {
+      field: "days",
+      headerName: "Total Days",
+      flex: 1,
+      valueGetter: (params) => calculateDaysDiff(params.row.startDate, params.row.endDate),
+  },
     {
       field: "status",
       headerName: "Action / Status",
