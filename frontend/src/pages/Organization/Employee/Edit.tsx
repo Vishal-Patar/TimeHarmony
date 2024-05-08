@@ -67,6 +67,7 @@ const Edit = () => {
     if (employee) {
       setValue("name", employee.name);
       setValue("address", employee.address);
+      setValue("phoneNumber", employee.phoneNumber);
     }
     setLoading(false);
   }, [employee, setValue]);
@@ -107,20 +108,26 @@ const Edit = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            flexDirection: ['column-reverse', 'row'],
+            flexDirection: ["column-reverse", "row"],
             gap: 1,
-            justifyContent: 'space-between',
-            marginBottom: 1
+            justifyContent: "space-between",
+            marginBottom: 1,
           }}
         >
-          <Box sx={{
-            display: 'flex',
-            flexDirection: ['column', 'row'],
-            gap: 1,
-            alignSelf: 'flex-start'
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: ["column", "row"],
+              gap: 1,
+              alignSelf: "flex-start",
+            }}
+          >
             <Typography variant="h6">Employee {mode}</Typography>
-            <Chip label={employee?.user?.email} variant="outlined" color="info" />
+            <Chip
+              label={employee?.user?.email}
+              variant="outlined"
+              color="info"
+            />
           </Box>
 
           <Box
@@ -128,7 +135,7 @@ const Edit = () => {
               display: "flex",
               gap: 2,
               alignItems: "center",
-              alignSelf: 'flex-end'
+              alignSelf: "flex-end",
             }}
           >
             <FormControlLabel
@@ -173,14 +180,7 @@ const Edit = () => {
           helperText={errors?.name?.message?.toString()}
           inputProps={{ readOnly }}
         />
-        <TextField
-          label="address"
-          margin="normal"
-          fullWidth
-          multiline
-          {...register("address")}
-          inputProps={{ readOnly }}
-        />
+
         <Autocomplete
           disablePortal
           id="employee-designation"
@@ -247,6 +247,22 @@ const Edit = () => {
           )}
         />
       </form>
+      <Typography variant="h6">Personal Info</Typography>
+      <TextField
+        label="Address"
+        margin="normal"
+        fullWidth
+        multiline
+        {...register("address")}
+        inputProps={{ readOnly }}
+      />
+      <TextField
+        label="Phone Number"
+        margin="normal"
+        fullWidth
+        type="number"
+        {...register("phoneNumber")}
+      />
     </Box>
   );
 };
