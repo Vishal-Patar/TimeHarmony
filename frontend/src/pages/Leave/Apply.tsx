@@ -1,9 +1,4 @@
-import {
-  Autocomplete,
-  Box,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Autocomplete, Box, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +32,7 @@ const Apply = () => {
     setValue,
     formState: { errors },
     control,
-    watch
+    watch,
   } = useForm();
   const startDate = watch("startDate");
   const selectedLeaveType = watch("leaveType");
@@ -65,7 +60,7 @@ const Apply = () => {
     await mutateCreateAsync({
       employeeId: employee?._id,
       ...data,
-      leavesType: data?.leavesType?._id
+      leavesType: data?.leavesType?._id,
     });
     navigate(routes.leave());
   };
@@ -80,14 +75,15 @@ const Apply = () => {
 
   if (!isLoading && !leavesType?.length) {
     return (
-      <Box sx={{
-        flex: 1
-      }}>
+      <Box
+        sx={{
+          flex: 1,
+        }}
+      >
         <NoLeaveMessage />
       </Box>
-    )
+    );
   }
-
 
   return (
     <Box>
@@ -95,23 +91,38 @@ const Apply = () => {
         <Box
           sx={{
             display: "flex",
-            gap: 2,
-            justifyContent: "flex-end",
             alignItems: "center",
+            flexDirection: ["column-reverse", "row"],
+            gap: 1,
+            justifyContent: "space-between",
+            marginBottom: 1,
           }}
         >
-          <Button variant="contained" onClick={() => navigate(-1)}>
-            Cancel
-          </Button>
+          <Typography variant="h6" alignSelf={"flex-start"}>
+            Apply Leave
+          </Typography>
 
-          <Button
-            variant="contained"
-            color="success"
-            type="submit"
-            loading={isCreatePending}
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
           >
-            Apply
-          </Button>
+            <Button variant="contained" onClick={() => navigate(-1)}>
+              Cancel
+            </Button>
+
+            <Button
+              variant="contained"
+              color="success"
+              type="submit"
+              loading={isCreatePending}
+            >
+              Apply
+            </Button>
+          </Box>
         </Box>
 
         <Autocomplete
@@ -147,14 +158,14 @@ const Apply = () => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Box
             sx={{
-              display: 'flex',
+              display: "flex",
               gap: 2,
               marginTop: 2,
-              alignItems: 'center'
+              alignItems: "center",
             }}
           >
             <Controller
-              name={'startDate'}
+              name={"startDate"}
               control={control}
               rules={{
                 required: {
@@ -181,7 +192,7 @@ const Apply = () => {
             />
 
             <Controller
-              name={'endDate'}
+              name={"endDate"}
               control={control}
               rules={{
                 required: "End Date is required",
@@ -193,9 +204,14 @@ const Apply = () => {
                     const start = new Date(startDate);
                     const end = new Date(value);
                     const diffTime = Math.abs(end.getTime() - start.getTime());
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const diffDays = Math.ceil(
+                      diffTime / (1000 * 60 * 60 * 24)
+                    );
                     const remainingDays = selectedLeaveType?.remainingDays ?? 0;
-                    return diffDays <= remainingDays || `Leave duration must be less than or equal to ${remainingDays} days`;
+                    return (
+                      diffDays <= remainingDays ||
+                      `Leave duration must be less than or equal to ${remainingDays} days`
+                    );
                   },
                 },
               }}
@@ -217,7 +233,7 @@ const Apply = () => {
               )}
             />
             {selectedLeaveType?.remainingDays && (
-              <Typography variant="button" color={'green'}>
+              <Typography variant="button" color={"green"}>
                 Available: {selectedLeaveType?.remainingDays}
               </Typography>
             )}

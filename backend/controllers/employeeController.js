@@ -28,6 +28,7 @@ const createEmployee = asyncHandler(async (req, res) => {
       department,
       designation,
       reportingManager,
+      phoneNumber,
       status,
     } = req.body;
     const employee = new Employee({
@@ -37,6 +38,7 @@ const createEmployee = asyncHandler(async (req, res) => {
       department,
       designation,
       reportingManager,
+      phoneNumber,
       status,
     });
     await employee.save();
@@ -110,9 +112,9 @@ const deleteEmployee = asyncHandler(async (req, res) => {
 
 const updateEmployee = asyncHandler(async (req, res) => {
   try {
-    const { name, address, designation, department, reportingManager, status } =
+    const { name, address, designation, department, reportingManager, status, phoneNumber } =
       req.body;
-
+      
     // Create an update object with the fields to be updated
     const updateObj = {};
     if (name) updateObj.name = name;
@@ -121,6 +123,8 @@ const updateEmployee = asyncHandler(async (req, res) => {
     if (department) updateObj.department = department;
     if (reportingManager) updateObj.reportingManager = reportingManager;
     if (status !== undefined || status !== null) updateObj.status = status;
+    if (phoneNumber) updateObj.phoneNumber = phoneNumber;
+
     // Add other fields to updateObj as needed
 
     const updatedEmployee = await Employee.findByIdAndUpdate(

@@ -24,6 +24,8 @@ import { ModeType } from "../../../types/common";
 import useCheckAccess from "../../../helper/useCheckAccess";
 import UnauthorizedAccessCard from "../../../common/UnauthorizedAccessCard";
 import NoDataFound from "../../../common/NoDataFound";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const SECTION_ID = 7;
 
@@ -260,9 +262,15 @@ const Edit = () => {
         label="Phone Number"
         margin="normal"
         fullWidth
-        type="number"
+        type="tel"
+        inputProps={{
+          maxLength: 10,
+        }}
         {...register("phoneNumber")}
       />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker label="Date of Birth" />
+    </LocalizationProvider>
     </Box>
   );
 };

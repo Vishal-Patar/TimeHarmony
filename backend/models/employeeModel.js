@@ -9,6 +9,7 @@ const employeeSchema = Schema(
     },
     name: { type: String, required: true },
     address: { type: String },
+    phoneNumber: { type: Number },
     designation: {
       type: Schema.Types.ObjectId,
       ref: "Designation",
